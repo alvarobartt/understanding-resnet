@@ -2,6 +2,17 @@
 
 ![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
 
+- [ ] Implement Plain VS ResNet comparison
+- [ ] Use CIFAR-10 for training
+- [ ] Include not just the main considerations but also extra concepts (BN, Vanishing/Exploding Gradients, etc.)
+- [ ] Explain using my own words
+- [ ] Spend some time with the math behind
+- [ ] Explore next ideas/papers to read based on the information read in this paper
+
+## :crystal_ball: Future Ideas
+
+- [ ] VGG vs ResNet in IM and OD
+
 ## References
 
 ### From research papers
