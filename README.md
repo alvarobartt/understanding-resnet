@@ -1,4 +1,4 @@
-# :eye::brain: understanding-resnet
+# Understanding: ResNet
 
 ![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
 
