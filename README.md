@@ -34,3 +34,10 @@
 ### From books/posts/etc.
 
 - [Howard, J., Gugger, S., &amp; Chintala, S. (2020). Chapter 14. ResNets. In Deep learning for coders with fastai and PyTorch: AI applications without a PhD (pp. 441–458). O'Reilly Media, Inc.](https://www.amazon.es/Deep-Learning-Coders-Fastai-Pytorch/dp/1492045527)
+
+## Curated implementations
+
+- [Official PyTorch implementation of ResNet](https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py)
+- [PyTorch Tutorial to implement a ResNet to train with CIFAR10](https://pytorch-tutorial.readthedocs.io/en/latest/tutorial/chapter03_intermediate/3_2_2_cnn_resnet_cifar10/)
+- [Un-official implementation of ResNet for CIFAR10/100 by @akamaster](https://github.com/akamaster/pytorch_resnet_cifar10)
+- [Un-official implementation of ResNet for CIFAR10 by @kuanglui](https://github.com/kuangliu/pytorch-cifar)
