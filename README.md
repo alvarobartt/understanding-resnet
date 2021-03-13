@@ -1,4 +1,4 @@
-# :bookmark_tabs: understanding-resnet
+# :eye::brain: understanding-resnet
 
 ![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
 
@@ -7,7 +7,7 @@
 - [ ] Plain CNN vs ResNet
 - [ ] VGG vs ResNet in IM and OD
 
-## Implementation
+## :test_tube: Implementation
 
 In order to understand how does the ResNet architecture work, we will be implementing the simplest version of it, which
 is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
@@ -48,17 +48,17 @@ that stand for the 10 classes of the CIFAR10 dataset.
 All this information can be found in the original paper in the section "_4.2. CIFAR-10 and Analysis_", that contains the 
 experiments conducted by the authors on the CIFAR10 dataset.
 
-## References
+## :open_book: References
 
-### From research papers
+### :bookmark_tabs: From research papers
 
 - [He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 770-778).](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html)
 
-### From books/posts/etc.
+### :books: From books/posts/etc.
 
 - [Howard, J., Gugger, S., &amp; Chintala, S. (2020). Chapter 14. ResNets. In Deep learning for coders with fastai and PyTorch: AI applications without a PhD (pp. 441–458). O'Reilly Media, Inc.](https://www.amazon.es/Deep-Learning-Coders-Fastai-Pytorch/dp/1492045527)
 
-## Curated implementations
+### From code
 
 - [Official PyTorch implementation of ResNet](https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py)
 - [PyTorch Tutorial to implement a ResNet to train with CIFAR10](https://pytorch-tutorial.readthedocs.io/en/latest/tutorial/chapter03_intermediate/3_2_2_cnn_resnet_cifar10/)
