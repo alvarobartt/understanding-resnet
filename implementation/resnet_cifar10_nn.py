@@ -18,7 +18,7 @@ class ResNetNN(nn.Module):
     def forward(self, x):
         x = F.relu(self.bn1(self.conv1(x)))
         # resnet layers
-        x = F.avg_pool2d(x, kernel_size=4)
+        x = F.avg_pool2d(x, kernel_size=x.size()[3])
         x = x.view(x.size(0), -1)
         x = F.log_softmax(self.fc1(x), dim=1)
         return x
