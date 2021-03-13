@@ -43,7 +43,15 @@ class ResNetNN(nn.Module):
         x = x.view(x.size(0), -1)
         x = F.log_softmax(self.fc1(x), dim=1)
         return x
+ 
 
-
-net = ResNetNN()
-print(net)
+if __name__ == "__main__":
+    net = ResNetNN()
+    print(net)
+    
+    import torch
+    
+    x = torch.randn((1, 3, 32, 32))
+    y = net(x)
+    
+    print(x.shape, y.shape)
