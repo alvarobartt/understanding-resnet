@@ -1,0 +1,2 @@
+class ResNetBlock():
+    pass

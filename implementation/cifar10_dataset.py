@@ -7,7 +7,7 @@ import numpy as np
 
 transform = T.Compose([
     T.ToTensor(),
-    T.Normalize(mean=(.5, .5, .5), std=(.5, .5, .5))
+    T.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
 
 trainset = CIFAR10(root="./data", train=True, download=True, transform=transform)

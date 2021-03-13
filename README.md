@@ -1,6 +1,18 @@
-# 📑 understanding-resnet
+# :bookmark_tabs: understanding-resnet
 
 ![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
+
+| output map size | 32 x 32 | 16 x 16 | 8 x 8 |
+|-----------------|---------|---------|-------|
+| # layers        | 1 + 2n  | 2n      | 2n    |
+| # filters       | 16      | 32      | 64    |
+
+- `6n`: convolutional layers
+- `6n + 2`: stacked weighted layers
+
+- `n=3` -> `(6*3) + 2 = 20`: 20 weighted layers
+
+## :open_book: TODO Tasks
 
 - [ ] Implement Plain VS ResNet comparison
 - [ ] Use CIFAR-10 for training
