@@ -23,8 +23,3 @@ label = labels[0].item()
 
 print(image.shape, label)
 print(type(image))
-
-from PIL import Image
-
-image = Image.fromarray(image)
-image.show()
