@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 class ResNetBlock(nn.Module):
@@ -14,10 +15,10 @@ class ResNetBlock(nn.Module):
         self.conv2 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(num_features=out_channels)
 
-        self.shortcut = nn.Sequential([
+        self.shortcut = nn.Sequential(
             nn.Conv2d(in_channels=out_channels, out_channels=out_channels, kernel_size=1, stride=stride, bias=False),
             nn.BatchNorm2d(num_features=out_channels)
-        ])
+        )
 
     def forward(self, x):
         x = F.relu(self.bn1(self.conv1(x)))
