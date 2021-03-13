@@ -13,7 +13,7 @@ In order to understand how does the ResNet architecture work, we will be impleme
 is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
 neural network and residual network.
 
-__Main considerations__:
+__Some considerations__:
 
 - Input images are 32x32px (width x height) in RGB format (3 channels), which is a Tensor of shape `torch.Tensor([3, 32, 32])`.
 
@@ -58,7 +58,7 @@ experiments conducted by the authors on the CIFAR10 dataset.
 
 - [Howard, J., Gugger, S., &amp; Chintala, S. (2020). Chapter 14. ResNets. In Deep learning for coders with fastai and PyTorch: AI applications without a PhD (pp. 441–458). O'Reilly Media, Inc.](https://www.amazon.es/Deep-Learning-Coders-Fastai-Pytorch/dp/1492045527)
 
-### From code
+### :computer: From code
 
 - [Official PyTorch implementation of ResNet](https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py)
 - [PyTorch Tutorial to implement a ResNet to train with CIFAR10](https://pytorch-tutorial.readthedocs.io/en/latest/tutorial/chapter03_intermediate/3_2_2_cnn_resnet_cifar10/)
