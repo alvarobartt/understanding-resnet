@@ -3,9 +3,7 @@ import torch.nn.functional as F
 
 
 class ResNetBottleneckBlock(nn.Module):
-    """
-    """
-    
+
     def __init__(self, in_channels, out_channels, stride):
         super(ResNetBottleneckBlock, self).__init__()
 

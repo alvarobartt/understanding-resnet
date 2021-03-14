@@ -5,29 +5,30 @@ from resnet_block import ResNetBasicBlock
 
 
 class ResNetNN(nn.Module):
-    """
-    """
-
+    
     def __init__(self):
         super(ResNetNN, self).__init__()
 
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(num_features=16)
         
+        # Input image shape is 32x32 (no downsampling)
         self.rb1 = nn.Sequential(
             ResNetBasicBlock(in_channels=16, out_channels=16, stride=1),
             ResNetBasicBlock(in_channels=16, out_channels=16, stride=1),
             ResNetBasicBlock(in_channels=16, out_channels=16, stride=1)
         )
 
+        # Input image shape is 32x32 (downsampling in the first layer of the block, 32x32 -> 16x16)
         self.rb2 = nn.Sequential(
-            ResNetBasicBlock(in_channels=16, out_channels=32, stride=2),
+            ResNetBasicBlock(in_channels=16, out_channels=32, stride=2), # "The subsampling is performed by convolutions with a stride of 2"
             ResNetBasicBlock(in_channels=32, out_channels=32, stride=1),
             ResNetBasicBlock(in_channels=32, out_channels=32, stride=1)
         )
 
+        # Input image shape is 16x16 (downsampling in the first layer of the block, 16x16 -> 8x8)
         self.rb3 = nn.Sequential(
-            ResNetBasicBlock(in_channels=32, out_channels=64, stride=2),
+            ResNetBasicBlock(in_channels=32, out_channels=64, stride=2), # "The subsampling is performed by convolutions with a stride of 2"
             ResNetBasicBlock(in_channels=64, out_channels=64, stride=1),
             ResNetBasicBlock(in_channels=64, out_channels=64, stride=1)
         )

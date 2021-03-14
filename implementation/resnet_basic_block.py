@@ -3,8 +3,6 @@ import torch.nn.functional as F
 
 
 class ResNetBasicBlock(nn.Module):
-    """
-    """
     
     def __init__(self, in_channels, out_channels, stride):
         super(ResNetBasicBlock, self).__init__()
