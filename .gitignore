@@ -130,3 +130,6 @@ dmypy.json
 
 # CIFAR10 Dataset
 data/
+
+# VSCode Files
+.vscode

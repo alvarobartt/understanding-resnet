@@ -12,6 +12,8 @@
 
 * [ ] Plain CNN vs ResNet
 
+* [ ] Take references of https://learnopencv.com/understanding-alexnet/ ?
+
 * [ ] VGG vs ResNet in IM and OD
 
 ## :test_tube: Implementation
@@ -48,7 +50,9 @@ from 32x32 to 16x16, and then to 8x8.
 * Then we will include the residual blocks (the basic, not the bottleneck ones), that is a stack of `6*n`
 layers with 3x3 convolutions, that contains `2n` layers for each feature map size.
 
-* The subsampling is performed by convolutions with a stride of 2.
+* The subsampling/downsampling is performed by convolutions with a stride of 2, instead of using pooling operations. 
+A comparison between both approaches can be found at: 
+[Stackexchange: Pooling vs. stride for downsampling](https://stats.stackexchange.com/questions/387482/pooling-vs-stride-for-downsampling/387522)
 
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
 that stand for the 10 classes of the CIFAR10 dataset.
