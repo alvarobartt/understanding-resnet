@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-from resnet_block import ResNetBlock
+from resnet_block import ResNetBasicBlock
 
 
 class ResNetNN(nn.Module):
@@ -15,21 +15,21 @@ class ResNetNN(nn.Module):
         self.bn1 = nn.BatchNorm2d(num_features=16)
         
         self.rb1 = nn.Sequential(
-            ResNetBlock(in_channels=16, out_channels=16, stride=1),
-            ResNetBlock(in_channels=16, out_channels=16, stride=1),
-            ResNetBlock(in_channels=16, out_channels=16, stride=1)
+            ResNetBasicBlock(in_channels=16, out_channels=16, stride=1),
+            ResNetBasicBlock(in_channels=16, out_channels=16, stride=1),
+            ResNetBasicBlock(in_channels=16, out_channels=16, stride=1)
         )
 
         self.rb2 = nn.Sequential(
-            ResNetBlock(in_channels=16, out_channels=32, stride=2),
-            ResNetBlock(in_channels=32, out_channels=32, stride=1),
-            ResNetBlock(in_channels=32, out_channels=32, stride=1)
+            ResNetBasicBlock(in_channels=16, out_channels=32, stride=2),
+            ResNetBasicBlock(in_channels=32, out_channels=32, stride=1),
+            ResNetBasicBlock(in_channels=32, out_channels=32, stride=1)
         )
 
         self.rb3 = nn.Sequential(
-            ResNetBlock(in_channels=32, out_channels=64, stride=2),
-            ResNetBlock(in_channels=64, out_channels=64, stride=1),
-            ResNetBlock(in_channels=64, out_channels=64, stride=1)
+            ResNetBasicBlock(in_channels=32, out_channels=64, stride=2),
+            ResNetBasicBlock(in_channels=64, out_channels=64, stride=1),
+            ResNetBasicBlock(in_channels=64, out_channels=64, stride=1)
         )
         
         self.fc1 = nn.Linear(64, 10)
@@ -55,3 +55,4 @@ if __name__ == "__main__":
     y = net(x)
     
     print(x.shape, y.shape)
+    print(y)

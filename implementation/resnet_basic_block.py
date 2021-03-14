@@ -2,12 +2,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class ResNetBlock(nn.Module):
+class ResNetBasicBlock(nn.Module):
     """
     """
     
     def __init__(self, in_channels, out_channels, stride):
-        super(ResNetBlock, self).__init__()
+        super(ResNetBasicBlock, self).__init__()
 
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(num_features=out_channels)
