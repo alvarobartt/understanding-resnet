@@ -2,19 +2,17 @@
 
 ![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
 
-- summary
+- TL;DR summary
 - explanation of residual learning
 - useful concepts
-- neural net structure
-- etc
 
 ## :crystal_ball: Future Tasks
 
 * [ ] Plain CNN vs ResNet
 
-* [ ] Take references of https://learnopencv.com/understanding-alexnet/ ?
+* [ ] Take inspiration from https://learnopencv.com/understanding-alexnet/
 
-* [ ] VGG vs ResNet in IM and OD
+* [ ] VGG vs ResNet in Image Classification and Object Detection
 
 ## :test_tube: Implementation
 
@@ -23,7 +21,9 @@ is the ResNet20 for CIFAR10. This exercise will be useful to understand the main
 neural network and residual network.
 
 So on, before proceeding with the implementation, we will carefully read the research paper so as to extract some knowledge
-required so as to properly understand how did the authors implement it:
+required so as to properly understand how did the authors implement it.
+
+### :open_file_folder: Dataset
 
 * Input images are 32x32px (width x height) in RGB format (3 channels), which is a Tensor of shape `torch.Tensor([3, 32, 32])`.
 
@@ -31,6 +31,8 @@ required so as to properly understand how did the authors implement it:
 
 * The data will be augmented padding 4px on each side, followed by a random crop of a window of shape 32x32 either from the 
 original image or from its horizontal flip; just for the training data.
+
+### :brain: Architecture
 
 * The architecture is summarized in the following table, where `n=3` leading to a neural network with 20 weighted layers.
 
@@ -56,6 +58,8 @@ A comparison between both approaches can be found at:
 
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
 that stand for the 10 classes of the CIFAR10 dataset.
+
+---
 
 All this information can be found in the original paper in the section "_4.2. CIFAR-10 and Analysis_", that contains the 
 experiments conducted by the authors on the CIFAR10 dataset.
