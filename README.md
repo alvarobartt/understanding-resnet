@@ -6,6 +6,10 @@
 - explanation of residual learning
 - useful concepts
 
+## :notebook: Explanation
+
+bla bla bla
+
 ## :crystal_ball: Future Tasks
 
 * [ ] Plain CNN vs ResNet
