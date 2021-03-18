@@ -1,14 +1,9 @@
 # understanding-resnet
 
-![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
-
-- TL;DR summary
-- explanation of residual learning
-- useful concepts
-
-## :notebook: Explanation
-
-bla bla bla
+TL;DR In Residual Learning the layers are reformulated as learning residual functions with
+reference to the layer inputs. These networks are easier to optimize, and can gain accuracy
+from considerably increased depth. Along this repository not just an explanation is provided
+but also a minimal implementation of a small ResNet for CIFAR10 with 20 layers.
 
 ## :crystal_ball: Future Tasks
 
@@ -17,6 +12,25 @@ bla bla bla
 * [ ] Take inspiration from https://learnopencv.com/understanding-alexnet/
 
 * [ ] VGG vs ResNet in Image Classification and Object Detection
+
+## :notebook: Explanation
+
+Answering to the question "_Is learning better networks as easy as stacking more layers?_", so it's 
+not as straight forward since we run into the problem of vanishing/exploding gradients, which is usually
+addressed with batch normalization, so that those networks start converging for SGD with backprop.
+
+Anyway, when those networks start converging, the degradation problem araises; so that the accuracy
+gets saturated and then degrades rapidly, due to an increase in the training error (not overfitting).
+
+The authors address the degradation problem introducing the concept of residual learning, which introduces
+the idea of the residual mapping, where that there's no expectation that the stacked layers will fit
+the underlying mapping, but the residual one. So that they state that it should be easier to optimize
+the residual mapping than the unreferenced one.
+
+So on, the "shortcut connections" are the ones connecting the input of a stack of convolutional layers
+and the last convolutional layer on the stack, via skipping the intermediate connections.
+
+![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
 
 ## :test_tube: Implementation
 
@@ -63,10 +77,12 @@ A comparison between both approaches can be found at:
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
 that stand for the 10 classes of the CIFAR10 dataset.
 
----
+  ---
 
 All this information can be found in the original paper in the section "_4.2. CIFAR-10 and Analysis_", that contains the 
 experiments conducted by the authors on the CIFAR10 dataset.
+
+---
 
 ## :open_book: References
 
@@ -87,3 +103,12 @@ experiments conducted by the authors on the CIFAR10 dataset.
 * [Un-official implementation of ResNet for CIFAR10/100 by @akamaster](https://github.com/akamaster/pytorch_resnet_cifar10)
 
 * [Un-official implementation of ResNet for CIFAR10 by @kuanglui](https://github.com/kuangliu/pytorch-cifar)
+
+---
+
+## :warning: Disclaimer
+
+All the credits go to the original authors, this is just a personal repository I create so as to
+have a better understanding on the paper/s mentioned along this repository. Last but not least, 
+there's a plenty of more useful resources out there, so always try to double check everything you
+see (not just in this repository).
