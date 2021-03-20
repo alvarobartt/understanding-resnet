@@ -30,16 +30,51 @@ the residual mapping than the unreferenced one.
 So on, the "shortcut connections" are the ones connecting the input of a stack of convolutional layers
 and the last convolutional layer on the stack, via skipping the intermediate connections.
 
-![image](https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png)
+<p align="center">
+  <img width="400" height="250" src="https://user-images.githubusercontent.com/36760800/110832871-142dff80-829c-11eb-9c13-01d417e535d2.png"/>
+</p>
+
+<p align="center">
+  <i>Source: <a href="https://arxiv.org/abs/1512.03385">Figure 2: Residual learning: a building block (courtesy of Kaiming He et al.)</a></i>
+</p>
+
+Based on this idea of "shortcut connections" the authors proposed CNN architectures using 
+their deep residual learning approach, fundamented on the hypothesis that if multiple
+non-linear layers can asymptotically approximate complicated functions, they could also
+approximate residual functions.
+
+So that on a block of stacked layers instead of approximating the underlying mapping, we
+are approximating the residual function defined as: F(x) := H(x) + x; so that the stack
+of layers approximates F(x) + x, where both have the same dimensions. This means that if
+the identity mappings are optimal, the solvers may drive the weights of the multiple 
+non-linear layers towards zero to approach the identity mappings.
+
+"Shortcut connections" do not include extra complexity, besides the element-wise addition,
+that has so little computational cost, so that it can be not taken into consideration. 
+This is also helpful towards comparing both approaches, plain CNNs versus deep residual 
+learning networks, as both have the same amount trainable parameters, and the same 
+computational complexity.
+
+Usually the residual learning is adopted every few stacked layers, with the condition
+that the input dimention and the last layer's dimension in a building block is the 
+same; and that in order to see advantages, the residual function should involve at
+least 2 convolutional layers (experiments with 1 convolutional layer showed no great
+improvement/advantage over plain CNNs).
+
+Finally, before proceeding with the implementation of the ResNet based on the experiments
+Kaiming He et al. conducted for the CIFAR10 dataset; we will mention that before running
+these experiments, the authors already proved that deep residual learning improved the 
+performance of other CNN architectures for the ImageNet problem such as VGG or GoogLeNet.
+In addition to this, they also proved that when using deep residual learning compared
+to plain CNNs, the training error was decreasing when adding more layers, which was 
+paliating the side-effect of the degradation problem.
 
 ## :test_tube: Implementation
 
 In order to understand how does the ResNet architecture work, we will be implementing the simplest version of it, which
 is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
-neural network and residual network.
-
-So on, before proceeding with the implementation, we will carefully read the research paper so as to extract some knowledge
-required so as to properly understand how did the authors implement it.
+neural network and deep residual network, and the functionality of the 
+"shortcut connections" in the residual building blocks.
 
 ### :open_file_folder: Dataset
 
