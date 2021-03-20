@@ -22,12 +22,12 @@ addressed with batch normalization, so that those networks start converging for 
 Anyway, when those networks start converging, the degradation problem araises; so that the accuracy
 gets saturated and then degrades rapidly, due to an increase in the training error (not overfitting).
 
-The authors address the degradation problem introducing the concept of residual learning, which introduces
+__The authors address the degradation problem introducing the concept of residual learning__, which introduces
 the idea of the residual mapping, where that there's no expectation that the stacked layers will fit
 the underlying mapping, but the residual one. So that they state that it should be easier to optimize
 the residual mapping than the unreferenced one.
 
-So on, the "shortcut connections" are the ones connecting the input of a stack of convolutional layers
+So on, the "_shortcut connections_" are the ones connecting the input of a stack of convolutional layers
 and the last convolutional layer on the stack, via skipping the intermediate connections.
 
 <p align="center">
@@ -38,24 +38,24 @@ and the last convolutional layer on the stack, via skipping the intermediate con
   <i>Source: <a href="https://arxiv.org/abs/1512.03385">Figure 2: Residual learning: a building block (courtesy of Kaiming He et al.)</a></i>
 </p>
 
-Based on this idea of "shortcut connections" the authors proposed CNN architectures using 
-their deep residual learning approach, fundamented on the hypothesis that if multiple
+Based on this idea of "_shortcut connections_" the authors proposed CNN architectures using 
+their deep residual learning approach, __fundamented on the hypothesis that if multiple
 non-linear layers can asymptotically approximate complicated functions, they could also
-approximate residual functions.
+approximate residual functions__.
 
 So that on a block of stacked layers instead of approximating the underlying mapping, we
-are approximating the residual function defined as: F(x) := H(x) + x; so that the stack
-of layers approximates F(x) + x, where both have the same dimensions. This means that if
+are approximating the residual function defined as: `F(x) := H(x) + x`; so that the stack
+of layers approximates `F(x) + x`, where both have the same dimensions. This means that if
 the identity mappings are optimal, the solvers may drive the weights of the multiple 
 non-linear layers towards zero to approach the identity mappings.
 
-"Shortcut connections" do not include extra complexity, besides the element-wise addition,
+__"_Shortcut connections_" do not include extra complexity, besides the element-wise addition__,
 that has so little computational cost, so that it can be not taken into consideration. 
 This is also helpful towards comparing both approaches, plain CNNs versus deep residual 
 learning networks, as both have the same amount trainable parameters, and the same 
 computational complexity.
 
-Usually the residual learning is adopted every few stacked layers, with the condition
+__Usually the residual learning is adopted every few stacked layers__, with the condition
 that the input dimention and the last layer's dimension in a building block is the 
 same; and that in order to see advantages, the residual function should involve at
 least 2 convolutional layers (experiments with 1 convolutional layer showed no great
@@ -74,7 +74,7 @@ paliating the side-effect of the degradation problem.
 In order to understand how does the ResNet architecture work, we will be implementing the simplest version of it, which
 is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
 neural network and deep residual network, and the functionality of the 
-"shortcut connections" in the residual building blocks.
+"_shortcut connections_" in the residual building blocks.
 
 ### :open_file_folder: Dataset
 
