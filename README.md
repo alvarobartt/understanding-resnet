@@ -13,6 +13,8 @@ but also a minimal implementation of a small ResNet for CIFAR10 with 20 layers.
 
 * [ ] VGG vs ResNet in Image Classification and Object Detection
 
+* [ ] Split implementations in PyTorch, PyTorch Lightning, JAX
+
 ## :notebook: Explanation
 
 Answering to the question "_Is learning better networks as easy as stacking more layers?_", so it's 
@@ -112,11 +114,6 @@ A comparison between both approaches can be found at:
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
 that stand for the 10 classes of the CIFAR10 dataset.
 
-  ---
-
-All this information can be found in the original paper in the section "_4.2. CIFAR-10 and Analysis_", that contains the 
-experiments conducted by the authors on the CIFAR10 dataset.
-
 ---
 
 ## :open_book: References
@@ -138,12 +135,3 @@ experiments conducted by the authors on the CIFAR10 dataset.
 * [Un-official implementation of ResNet for CIFAR10/100 by @akamaster](https://github.com/akamaster/pytorch_resnet_cifar10)
 
 * [Un-official implementation of ResNet for CIFAR10 by @kuanglui](https://github.com/kuangliu/pytorch-cifar)
-
----
-
-## :warning: Disclaimer
-
-All the credits go to the original authors, this is just a personal repository I create so as to
-have a better understanding on the paper/s mentioned along this repository. Last but not least, 
-there's a plenty of more useful resources out there, so always try to double check everything you
-see (not just in this repository).
