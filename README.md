@@ -1,19 +1,15 @@
 # understanding-resnet
 
-TL;DR In Residual Learning the layers are reformulated as learning residual functions with
+__TL;DR__ In Residual Learning the layers are reformulated as learning residual functions with
 reference to the layer inputs. These networks are easier to optimize, and can gain accuracy
 from considerably increased depth. Along this repository not just an explanation is provided
 but also a minimal implementation of a small ResNet for CIFAR10 with 20 layers.
 
 ## :crystal_ball: Future Tasks
 
-* [ ] Plain CNN vs ResNet
-
-* [ ] Take inspiration from https://learnopencv.com/understanding-alexnet/
-
-* [ ] VGG vs ResNet in Image Classification and Object Detection
-
 * [ ] Split implementations in PyTorch, PyTorch Lightning, JAX
+
+![image](https://user-images.githubusercontent.com/36760800/112517074-3180c480-8d98-11eb-8fc5-df825000890b.png)
 
 ## :notebook: Explanation
 
@@ -70,6 +66,24 @@ performance of other CNN architectures for the ImageNet problem such as VGG or G
 In addition to this, they also proved that when using deep residual learning compared
 to plain CNNs, the training error was decreasing when adding more layers, which was 
 paliating the side-effect of the degradation problem.
+
+## :pushpin: Useful concepts
+
+* __Vanishing/Exploding Gradients:__ bla
+* __Shortcut/Skip Connections__: bla
+* __Batch Normalization__: bla
+* __Residual Learning:__ bla
+* __Kaiming He Weight Initilization__: bla
+* __ResNet Block as a Bottleneck__: bla
+
+## :question: Why ResNets work?
+
+Videos to watch before tackling this section:
+
+- [ResNets Explained](https://www.youtube.com/watch?v=sAzL4XMke80)
+- [Deep Residual Learning for Image Recognition (Paper Explained) - Yannic Kilcher](https://www.youtube.com/watch?v=GWt6Fu05voI)
+- [ResNets - DeepLearning.AI](https://www.youtube.com/watch?v=ZILIbUvp5lk)
+- [Why ResNets work? - DeepLearning.AI](https://www.youtube.com/watch?v=RYth6EbBUqM)
 
 ## :test_tube: Implementation
 
