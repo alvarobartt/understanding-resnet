@@ -69,11 +69,24 @@ paliating the side-effect of the degradation problem.
 
 ## :pushpin: Useful concepts
 
-* __Vanishing/Exploding Gradients:__ bla
+* __Vanishing/Exploding Gradients:__ this is a common error that usually happens in deep nets, when
+the gradient of the early layers get vanishingly small, as consequence of the product of gradients between 
+0 and 1 in the deeper layers, which results in a smaller gradient. This means that the small gradient is 
+backwards propagated so that when it gets to the early layers, the update of the weights is small as the
+gradient is really small. Then this makes the net harder to train as the weights in the early layers suffer
+small changes, which means that the global or local minimum of the loss function won't be reached. Exploding
+gradients is the opposite, which means that the gradients that get propagated backwards are huge, so that the 
+weight updates are not able to find the best weights, and so on, not to able to find the global or local minimum
+of the loss function.
+
 * __Shortcut/Skip Connections__: bla
+
 * __Batch Normalization__: bla
+
 * __Residual Learning:__ bla
+
 * __Kaiming He Weight Initilization__: bla
+
 * __ResNet Block as a Bottleneck__: bla
 
 ## :question: Why ResNets work?
