@@ -42,7 +42,7 @@ non-linear layers can asymptotically approximate complicated functions, they cou
 approximate residual functions__.
 
 So that on a block of stacked layers instead of approximating the underlying mapping, we
-are approximating the residual function defined as: `F(x) := H(x) + x`; so that the stack
+are approximating the residual function defined as: `F(x) := H(x) - x`; so that the stack
 of layers approximates `F(x) + x`, where both have the same dimensions. This means that if
 the identity mappings are optimal, the solvers may drive the weights of the multiple 
 non-linear layers towards zero to approach the identity mappings.
@@ -59,13 +59,13 @@ same; and that in order to see advantages, the residual function should involve 
 least 2 convolutional layers (experiments with 1 convolutional layer showed no great
 improvement/advantage over plain CNNs).
 
-Finally, before proceeding with the implementation of the ResNet based on the experiments
+Finally, before proceeding with the implementation of the ResNet-20 based on the experiments
 Kaiming He et al. conducted for the CIFAR10 dataset; we will mention that before running
 these experiments, the authors already proved that deep residual learning improved the 
 performance of other CNN architectures for the ImageNet problem such as VGG or GoogLeNet.
 In addition to this, they also proved that when using deep residual learning compared
 to plain CNNs, the training error was decreasing when adding more layers, which was 
-paliating the side-effect of the degradation problem.
+paliating the degradation problem.
 
 ## :pushpin: Useful concepts
 
@@ -87,7 +87,7 @@ mappings the accuracy should be the same as one achieved with the shallower net.
 degradation problem appears as multiple non-linear layers can't learn the identity mappings, so that the accuracy
 gets degradated.
 
-* __Batch Normalization__: bla
+* __Batch Normalization__: bla -> https://arxiv.org/pdf/1502.03167.pdf
 
 * __Shortcut/Skip Connections__: these connections are formulated so as to solve the degradation problem so that we
 can create a deeper net from the shallower version of it, without degradating the training accuracy. These 
@@ -102,7 +102,7 @@ so that the original mapping can be recasted to `F(x) + x`; in the worst case wh
 0 (let's assume we are using ReLU as the activation function), we will still keep the residual mapping `x`; so 
 that the training accuracy will be at least as good in the deeper net as in its shallower counterpart.
 
-* __Kaiming He Weight Initilization__: bla
+* __Kaiming He Weight Initilization__: bla -> https://arxiv.org/pdf/1502.01852.pdf
 
 * __ResNet Block as a Bottleneck__: bla
 
@@ -115,7 +115,7 @@ Videos to watch before tackling this section:
 - [ResNets - DeepLearning.AI](https://www.youtube.com/watch?v=ZILIbUvp5lk)
 - [Why ResNets work? - DeepLearning.AI](https://www.youtube.com/watch?v=RYth6EbBUqM)
 
-## :test_tube: Implementation
+## :test_tube: ResNet-20 Implementation
 
 In order to understand how does the ResNet architecture work, we will be implementing the simplest version of it, which
 is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
