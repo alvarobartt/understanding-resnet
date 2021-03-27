@@ -79,11 +79,28 @@ gradients is the opposite, which means that the gradients that get propagated ba
 weight updates are not able to find the best weights, and so on, not to able to find the global or local minimum
 of the loss function.
 
-* __Shortcut/Skip Connections__: bla
+* __Degradation Problem__: deep nets tend to suffer from the degradation problem when including more layers 
+(increasing the depth of the net), so that the accuracy decreases, but this is not due to overfitting. We should
+expect that if a shallower net gets a certain accuracy, a deeper one should do at least as well as the shallower
+counterpart. Anyway, if those extra layers we include in the shallower net to make it deeper are just identity 
+mappings the accuracy should be the same as one achieved with the shallower net. But this doesn't happen, as the
+degradation problem appears as multiple non-linear layers can't learn the identity mappings, so that the accuracy
+gets degradated.
 
 * __Batch Normalization__: bla
 
-* __Residual Learning:__ bla
+* __Shortcut/Skip Connections__: these connections are formulated so as to solve the degradation problem so that we
+can create a deeper net from the shallower version of it, without degradating the training accuracy. These 
+connections skip one or more layers.
+
+* __Residual Learning__: instead of expecting a stack of layers to directly fit a desired underlying mapping, 
+those layers fit the residual mapping. So that instead of using a stack of non-linear layers to learn the identity 
+mappings we include the shortcut/skip,connection that connects the input of that stack of layers to the output of 
+the last layer in the stack, so that we ensure that the deeper counterpart achieves at least the same accuracy as
+the shallower counterpart. Instead of fitting the desired mapping `H(x)`, we fit another mapping `F(x) := H(x) - x`,
+so that the original mapping can be recasted to `F(x) + x`; in the worst case where the desired mapping `F(x)` is 
+0 (let's assume we are using ReLU as the activation function), we will still keep the residual mapping `x`; so 
+that the training accuracy will be at least as good in the deeper net as in its shallower counterpart.
 
 * __Kaiming He Weight Initilization__: bla
 
