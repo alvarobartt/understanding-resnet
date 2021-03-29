@@ -127,7 +127,8 @@ that the training accuracy will be at least as good in the deeper net as in its 
 
 ## :question: Why ResNets work?
 
-Videos to watch before tackling this section:
+Here you have a curated list of useful videos you can watch while I summarize all the information in a clear and concise way, 
+so as to understand why ResNets work and how are ResNets used in practice:
 
 - [ResNets Explained](https://www.youtube.com/watch?v=sAzL4XMke80)
 - [Deep Residual Learning for Image Recognition (Paper Explained) - Yannic Kilcher](https://www.youtube.com/watch?v=GWt6Fu05voI)
@@ -179,6 +180,20 @@ that stands for the 10 classes of the CIFAR10 dataset.
 
 ---
 
+## :memo: Cite the authors
+
+```bibtex
+@inproceedings{he2016deep,
+  title={Deep residual learning for image recognition},
+  author={He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={770--778},
+  year={2016}
+}
+```
+
+---
+
 ## :open_book: References
 
 ### :bookmark_tabs: From research papers
@@ -192,9 +207,3 @@ that stands for the 10 classes of the CIFAR10 dataset.
 ### :computer: From code
 
 * [Official PyTorch implementation of ResNet](https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py)
-
-* [PyTorch Tutorial to implement a ResNet to train with CIFAR10](https://pytorch-tutorial.readthedocs.io/en/latest/tutorial/chapter03_intermediate/3_2_2_cnn_resnet_cifar10/)
-
-* [Un-official implementation of ResNet for CIFAR10/100 by @akamaster](https://github.com/akamaster/pytorch_resnet_cifar10)
-
-* [Un-official implementation of ResNet for CIFAR10 by @kuanglui](https://github.com/kuangliu/pytorch-cifar)
