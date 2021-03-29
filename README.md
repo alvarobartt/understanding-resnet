@@ -98,7 +98,7 @@ are more stable. We should expect the normalized hidden units have a mean of zer
 the normalization performed to the input values, but what we just want is to have them in a standard scale, to 
 avoid sparsity, which results on the net training slower and having inbalanced gradients, causing instability. So 
 on, BN speeds up the training as it makes the optimization landscape significantly smoother, which results in a 
-stabilization of the gradients accross all the neurons, allowing faster training (1805.11604)[https://arxiv.org/pdf/1805.11604.pdf]; 
+stabilization of the gradients accross all the neurons, allowing faster training ([1805.11604](https://arxiv.org/pdf/1805.11604.pdf)); 
 due to this, BN also allows sub-optimal weight initialization, so that that it is less important, as we will get 
 the local minimum in a similar number of iterations. As previously mentioned, BN also acts as a regularizer, since 
 it computes the mean and variance per every neuron activation on each mini-batch so that it's including a random 
