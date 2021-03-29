@@ -3,7 +3,9 @@
 __TL;DR__ In Residual Learning the layers are reformulated as learning residual functions with
 reference to the layer inputs. These networks are easier to optimize, and can gain accuracy
 from considerably increased depth. Along this repository not just an explanation is provided
-but also a minimal implementation of a small ResNet for CIFAR10 with 20 layers.
+but also the implementation of the ResNet architecture written in PyTorch, MXNet and JAX. 
+Additionally, here you will also find the ResNet20 trained with CIFAR10, as proposed by the
+authors; which is the smallest ResNet described in the original paper.
 
 ## :crystal_ball: Future Tasks
 
@@ -87,7 +89,24 @@ mappings the accuracy should be the same as one achieved with the shallower net.
 degradation problem appears as multiple non-linear layers can't learn the identity mappings, so that the accuracy
 gets degradated.
 
-* __Batch Normalization__: bla -> https://arxiv.org/pdf/1502.03167.pdf
+* __Batch Normalization (BN)__: it's a technique for improving the performance and stability of neural nets. BN 
+keeps the back propagated gradients from getting too big or too small by rescaling and recentering the value of 
+all the hidden units in a mini-batch. BN mainly affects the intermediate layers, not the early ones, making all 
+the hidden units on each layer to have the same mean and variance, reducing the effect of the covariant shift. 
+BN reduces the problem of the input values changing when updating the learnable parameters, so that those values 
+are more stable. We should expect the normalized hidden units have a mean of zero and variance of one, just like 
+the normalization performed to the input values, but what we just want is to have them in a standard scale, to 
+avoid sparsity, which results on the net training slower and having inbalanced gradients, causing instability. So 
+on, BN speeds up the training as it makes the optimization landscape significantly smoother, which results in a 
+stabilization of the gradients accross all the neurons, allowing faster training (1805.11604)[https://arxiv.org/pdf/1805.11604.pdf]; 
+due to this, BN also allows sub-optimal weight initialization, so that that it is less important, as we will get 
+the local minimum in a similar number of iterations. As previously mentioned, BN also acts as a regularizer, since 
+it computes the mean and variance per every neuron activation on each mini-batch so that it's including a random 
+noise to both the mean and the standard deviation, forcing the downstream hidden units not to rely that much on a 
+hidden unit. Note that increasing the mini-batch size results on a poor regularization effect. Even though BN acts 
+as a normalizer with some sort of randomness, usually the deep nets keep BN together with Dropout, as both 
+regularizers combined tend to provide better results ([1905.05928](https://arxiv.org/pdf/1905.05928.pdf)). More 
+information about BN available in [1502.03167](https://arxiv.org/pdf/1502.03167.pdf).
 
 * __Shortcut/Skip Connections__: these connections are formulated so as to solve the degradation problem so that we
 can create a deeper net from the shallower version of it, without degradating the training accuracy. These 
@@ -102,7 +121,7 @@ so that the original mapping can be recasted to `F(x) + x`; in the worst case wh
 0 (let's assume we are using ReLU as the activation function), we will still keep the residual mapping `x`; so 
 that the training accuracy will be at least as good in the deeper net as in its shallower counterpart.
 
-* __Kaiming He Weight Initilization__: bla -> https://arxiv.org/pdf/1502.01852.pdf
+* __Kaiming He Weight Initialization__: bla -> More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
 
 * __ResNet Block as a Bottleneck__: bla
 
@@ -156,7 +175,7 @@ A comparison between both approaches can be found at:
 [Stackexchange: Pooling vs. stride for downsampling](https://stats.stackexchange.com/questions/387482/pooling-vs-stride-for-downsampling/387522)
 
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
-that stand for the 10 classes of the CIFAR10 dataset.
+that stands for the 10 classes of the CIFAR10 dataset.
 
 ---
 
