@@ -1,5 +1,7 @@
 # understanding-resnet
 
+[![arXiv](https://img.shields.io/badge/arXiv-1512.03385-b31b1b.svg?style=flat)](https://arxiv.org/abs/1512.03385)
+
 __TL;DR__ In Residual Learning the layers are reformulated as learning residual functions with
 reference to the layer inputs. These networks are easier to optimize, and can gain accuracy
 from considerably increased depth. Along this repository not just an explanation is provided
