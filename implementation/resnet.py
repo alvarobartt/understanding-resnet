@@ -11,7 +11,6 @@ from torch import Tensor
 
 
 class BasicBlock(nn.Module):
-    
     def __init__(self, in_channels: int, out_channels: int, stride: int) -> None:
         super(BasicBlock, self).__init__()
 
@@ -36,8 +35,8 @@ class BasicBlock(nn.Module):
         x_ = F.relu(x_)
         return x_
 
+
 class ResNet(nn.Module):
-    
     def __init__(self, num_classes: int) -> None:
         super(ResNet, self).__init__()
 
@@ -76,6 +75,19 @@ class ResNet(nn.Module):
         x = x.view(x.size(0), -1)
         x = F.log_softmax(self.fc1(x), dim=1)
         return x
+
+    def _make_layers(self, num_blocks: int, planes: int, subsampling: bool) -> nn.Sequential:
+        layers = list()
+        
+        if subsampling:
+            layers.append(BasicBlock(in_channels=planes, out_channels=planes, stride=2))
+            num_blocks -= 1
+            planes *= 2
+
+        for _ in range(num_blocks):
+            layers.append(BasicBlock(in_channels=planes, out_channels=planes, stride=1))
+
+        return nn.Sequential(*layers)
  
 
 if __name__ == "__main__":
