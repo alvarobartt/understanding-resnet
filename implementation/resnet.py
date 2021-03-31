@@ -7,10 +7,12 @@ https://arxiv.org/pdf/1512.03385.pdf
 import torch.nn as nn
 import torch.nn.functional as F
 
+from torch import Tensor
+
 
 class BasicBlock(nn.Module):
     
-    def __init__(self, in_channels, out_channels, stride):
+    def __init__(self, in_channels: int, out_channels: int, stride: int) -> None:
         super(BasicBlock, self).__init__()
 
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1, bias=False)
@@ -27,7 +29,7 @@ class BasicBlock(nn.Module):
                 nn.BatchNorm2d(num_features=out_channels)
             )
 
-    def forward(self, x):
+    def forward(self, x: Tensor) -> Tensor:
         x_ = F.relu(self.bn1(self.conv1(x)))
         x_ = self.bn2(self.conv2(x_))
         x_ += self.shortcut(x)
@@ -36,7 +38,7 @@ class BasicBlock(nn.Module):
 
 class ResNet(nn.Module):
     
-    def __init__(self, num_classes: int):
+    def __init__(self, num_classes: int) -> None:
         super(ResNet, self).__init__()
 
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False)
@@ -65,7 +67,7 @@ class ResNet(nn.Module):
         
         self.fc1 = nn.Linear(64, num_classes)
 
-    def forward(self, x):
+    def forward(self, x: Tensor) -> Tensor:
         x = F.relu(self.bn1(self.conv1(x)))
         x = self.rb1(x)
         x = self.rb2(x)
