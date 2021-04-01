@@ -125,7 +125,7 @@ that the training accuracy will be at least as good in the deeper net as in its 
 
 * __Kaiming He Weight Initialization__: bla -> More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
 
-* __ResNet Block as a Bottleneck__: bla
+* __ResNet Block as a Bottleneck design__: bla
 
 ## :question: Why ResNets work?
 
