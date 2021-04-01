@@ -39,29 +39,31 @@ class BasicBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, blocks: List[int], num_classes: int) -> None:
+    def __init__(self, blocks: List[int], filters: List[int], num_classes: int) -> None:
         super(ResNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(num_features=16)
+        assert len(blocks) == 3, "ResNet for CIFAR10 uses just 3 residual layers (ImageNet uses 4)"
+        assert len(blocks) == len(filters), "# of blocks must match # of filters"
+
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=filters[0], kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(num_features=filters[0])
         
         # Input image shape is 32x32 (no subsampling/downsampling)
-        self.rb1 = self._make_layers(num_blocks=3, planes=16, subsampling=False)
+        self.rl1 = self._make_layers(num_blocks=blocks[0], planes=filters[0], subsampling=False)
 
         # Input image shape is 32x32 (subsampling/downsampling in the first layer of the block, 32x32 -> 16x16)
-        self.rb2 = self._make_layers(num_blocks=3, planes=16, subsampling=True)
+        self.rl2 = self._make_layers(num_blocks=blocks[1], planes=filters[0], subsampling=True)
 
         # Input image shape is 16x16 (subsampling/downsampling in the first layer of the block, 16x16 -> 8x8)
-        self.rb3 = self._make_layers(num_blocks=3, planes=32, subsampling=True)
+        self.rl3 = self._make_layers(num_blocks=blocks[2], planes=filters[1], subsampling=True)
         
-        self.fc1 = nn.Linear(64, num_classes)
+        self.fc1 = nn.Linear(filters[2], num_classes)
 
     def forward(self, x: Tensor) -> Tensor:
         x = F.relu(self.bn1(self.conv1(x)))
-        x = self.rb1(x)
-        x = self.rb2(x)
-        x = self.rb3(x)
-        # x = self.rb4(x) -> Just for ImageNet ResNet
+        x = self.rl1(x)
+        x = self.rl2(x)
+        x = self.rl3(x)
         x = F.avg_pool2d(x, kernel_size=x.size()[3])
         x = x.view(x.size(0), -1)
         x = F.log_softmax(self.fc1(x), dim=1)
@@ -83,7 +85,7 @@ class ResNet(nn.Module):
  
 
 if __name__ == "__main__":
-    net = ResNet(blocks=[3, 3, 3], num_classes=10)
+    net = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
     print(net)
     
     import torch
