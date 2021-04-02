@@ -7,6 +7,7 @@ https://arxiv.org/pdf/1512.03385.pdf
 from typing import List
 
 import torch.nn as nn
+import torch.nn.init as init
 import torch.nn.functional as F
 
 from torch import Tensor
@@ -55,6 +56,8 @@ class ResNet(nn.Module):
         
         self.fc1 = nn.Linear(filters[-1], num_classes)
 
+        self.apply(self._init_weights)
+
     def forward(self, x: Tensor) -> Tensor:
         x = F.relu(self.bn1(self.conv1(x)))
         x = self.rl1(x)
@@ -79,6 +82,10 @@ class ResNet(nn.Module):
             layers.append(BasicBlock(in_channels=planes, out_channels=planes, stride=1))
 
         return nn.Sequential(*layers)
+
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear) or isinstance(m, nn.Conv2d):
+            init.kaiming_uniform_(m.weight, mode='fan_in', nonlinearity='relu')
  
 
 if __name__ == "__main__":
