@@ -1,4 +1,4 @@
-"""ResNet
+"""ResNet Implementation in PyTorch
 
 He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
@@ -83,25 +83,25 @@ class ResNet(nn.Module):
 
 if __name__ == "__main__":
     # CIFAR10 ResNet20
-    net = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
-    print(net)
+    model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
+    print(model)
     
     import torch
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
     
     x = torch.randn((1, 3, 32, 32))
-    y = net(x)
+    y = model(x)
     
     print(x.shape, y.shape)
-    print(sum(param.numel() for param in net.parameters() if param.requires_grad))
+    print(sum(param.numel() for param in model.parameters() if param.requires_grad))
 
     # ImageNet ResNet18
-    net = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
-    print(net)
+    model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
+    print(model)
     
     x = torch.randn((1, 3, 224, 224))
-    y = net(x)
+    y = model(x)
     
     print(x.shape, y.shape)
-    print(sum(param.numel() for param in net.parameters() if param.requires_grad))
+    print(sum(param.numel() for param in model.parameters() if param.requires_grad))

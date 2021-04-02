@@ -69,8 +69,46 @@ def train_resnet20_with_cifar10():
     optimizer = optim.SGD(model.parameters(), lr=1e-1, momentum=0.9, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=0.1)
 
+    # Weights and Biases Logging? -> TODO
+
+    # Initialize variables before training
+    smaller_test_error = 1.0
+
     # Training loop
-    # for epoch in range(EPOCHS): -> TODO
+    # List of TODOs
+    # - Train/Val split (45k/5k)
+    # - Include Kaiming He weight initilization
+    for epoch in range(1, EPOCHS+1):
+        # best_acc = .0
+        # print(f"\nEpoch {epoch}/{EPOCHS}\n{'='*25}")
+        # for phase in ['train', 'val']:
+        #     running_loss = .0
+        #     running_corrects = .0
+        #     if phase == 'train': model.train()
+        #     if phase == 'val': model.eval()
+        #     for inputs, labels in loaders[phase]:
+        #         inputs, labels = inputs.to(device), labels.to(device)
+
+        #         optimizer.zero_grad()
+
+        #         with torch.set_grad_enabled(phase == 'train'):
+        #             outputs = model(inputs)
+        #             _, preds = torch.max(outputs, 1)
+        #             loss = criterion(outputs, labels)
+                    
+        #             if phase == 'train':
+        #                 loss.backward()
+        #                 optimizer.step()
+
+        #         running_loss += loss.item() * inputs.size(0)
+        #         running_corrects += torch.sum(preds == labels)
+        #     epoch_loss = running_loss / dataset_sizes[phase]
+        #     epoch_acc = running_corrects.double() / dataset_sizes[phase]
+        #     if phase == 'train': scheduler.step()
+        #     if phase == 'val' and epoch_acc > best_acc:
+        #         best_acc = epoch_acc
+        #         best_model_weights = deepcopy(model.state_dict())
+        #     print(f"Loss ({phase}): {epoch_loss}, Acc ({phase}): {epoch_acc}")
 
 
 if __name__ == '__main__':
