@@ -1,2 +1,8 @@
-torch
-torchvision
+# PyTorch
+--find-links=https://download.pytorch.org/whl/torch_stable.html
+torch==1.7.1+cu101
+torchvision==0.8.2+cu101
+# JAX
+--find-links=https://storage.googleapis.com/jax-releases/jax_releases.html
+jax
+jaxlib==0.1.64+cuda101
