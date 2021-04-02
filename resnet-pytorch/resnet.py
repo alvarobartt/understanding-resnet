@@ -100,10 +100,6 @@ if __name__ == "__main__":
     net = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
     print(net)
     
-    import torch
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(device)
-    
     x = torch.randn((1, 3, 224, 224))
     y = net(x)
     
