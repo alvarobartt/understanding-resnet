@@ -6,3 +6,5 @@ torchvision==0.8.2+cu101
 --find-links=https://storage.googleapis.com/jax-releases/jax_releases.html
 jax
 jaxlib==0.1.64+cuda101
+# MXNet
+mxnet-cu101
