@@ -11,9 +11,13 @@ authors; which is the smallest ResNet described in the original paper.
 
 ## :crystal_ball: Future Tasks
 
-* [ ] Split implementations in PyTorch, PyTorch Lightning, JAX
-
-![image](https://user-images.githubusercontent.com/36760800/112517074-3180c480-8d98-11eb-8fc5-df825000890b.png)
+* [ ] PyTorch Training for CIFAR10 using ResNet20
+* [ ] Upload weights to GitHub Releases
+* [ ] Implement ResNets using JAX
+* [ ] Include the Bottleneck block for ResNet
+* [ ] Implement ResNets using MXNet
+* [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
+* [ ] Use Weights and Biases `wandb` to track the experiments
 
 ## :notebook: Explanation
 
@@ -63,13 +67,11 @@ same; and that in order to see advantages, the residual function should involve 
 least 2 convolutional layers (experiments with 1 convolutional layer showed no great
 improvement/advantage over plain CNNs).
 
-Finally, before proceeding with the implementation of the ResNet-20 based on the experiments
-Kaiming He et al. conducted for the CIFAR10 dataset; we will mention that before running
-these experiments, the authors already proved that deep residual learning improved the 
-performance of other CNN architectures for the ImageNet problem such as VGG or GoogLeNet.
-In addition to this, they also proved that when using deep residual learning compared
-to plain CNNs, the training error was decreasing when adding more layers, which was 
-paliating the degradation problem.
+The authors proved that deep residual learning improved the performance of other CNN 
+architectures for the ImageNet problem such as VGG or GoogLeNet. In addition to this, 
+they also proved that when using deep residual learning compared to plain CNNs, the 
+training error was decreasing when adding more layers, which was paliating the degradation 
+problem.
 
 ## :pushpin: Useful concepts
 
@@ -164,7 +166,7 @@ original image or from its horizontal flip; just for the training data.
   
 * Both, the plain neural network and the residual neural network, have the exact same architecture.
 
-* The numbers of the convolutional filters are 16, 32, and 64; so that the size of the input image goes 
+* The convolutional filters to be applied are 16, 32, and 64; so that the size of the input image goes 
 from 32x32 to 16x16, and then to 8x8.
 
 * The neural network starts off with a convolutional layer which applies a 3x3 convolution, resulting in 
