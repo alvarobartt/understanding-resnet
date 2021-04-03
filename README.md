@@ -11,13 +11,14 @@ authors; which is the smallest ResNet described in the original paper.
 
 ## :crystal_ball: Future Tasks
 
-* [ ] PyTorch Training for CIFAR10 using ResNet20
-* [ ] Upload weights to GitHub Releases
+* [X] PyTorch Training for CIFAR10 using ResNet20
+* [X] Upload weights to GitHub Releases
 * [ ] Implement ResNets using JAX
 * [ ] Include the Bottleneck block for ResNet
 * [ ] Implement ResNets using MXNet
 * [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
-* [ ] Use Weights and Biases `wandb` to track the experiments
+* [ ] Compare the inference time depending on the memory-storage option (contiguous, channels last)
+* [X] Use Weights and Biases `wandb` to track the experiments
 
 ## :notebook: Explanation
 

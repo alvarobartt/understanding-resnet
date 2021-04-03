@@ -38,9 +38,8 @@ def train_resnet20_with_cifar10():
 
     # Initialize/Define train transformation
     train_transform = T.Compose([
-        T.Pad(padding=4), # Can be removed and replaced with T.RandomCrop(size=(32, 32), padding=4)
         T.RandomHorizontalFlip(),
-        T.RandomCrop(size=(32, 32)),
+        T.RandomCrop(size=(32, 32), padding=4),
         T.ToTensor(),
         T.Normalize(mean=norm_mean, std=norm_std)
     ])
@@ -52,7 +51,7 @@ def train_resnet20_with_cifar10():
     ])
 
     # Define the batch size before preparing the dataloaders
-    BATCH_SIZE = 128
+    BATCH_SIZE = 64
 
     # Load CIFAR10 train dataset (transform it too), and initialize dataloader
     train_dataset = CIFAR10(root="data", train=True, download=True, transform=train_transform)
@@ -67,8 +66,7 @@ def train_resnet20_with_cifar10():
     EPOCHS = ITERATIONS//len(train_dataloader)
     LR_MILESTONES = [32000//len(train_dataloader), 48000//len(train_dataloader)]
 
-    # Define the loss function, the optimizer, and the learning rate scheduler
-    criterion = nn.CrossEntropyLoss()
+    # Define the optimizer, and the learning rate scheduler
     optimizer = optim.SGD(model.parameters(), lr=1e-1, momentum=0.9, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=0.1)
 
@@ -103,12 +101,12 @@ def train_resnet20_with_cifar10():
 
             outputs = model(inputs)
             _, preds = torch.max(outputs, 1)
-            loss = criterion(outputs, labels)
+            loss = F.nll_loss(outputs, labels)
 
             loss.backward()
             optimizer.step()
 
-            running_loss += loss.item() * inputs.size(0)
+            running_loss += loss.item()
             running_corrects += torch.sum(preds == labels)
         
         train_loss = running_loss / len(train_dataset)
@@ -125,9 +123,9 @@ def train_resnet20_with_cifar10():
 
                 outputs = model(inputs)
                 _, preds = torch.max(outputs, 1)
-                loss = criterion(outputs, labels)
+                loss = F.nll_loss(outputs, labels)
 
-                running_loss += loss.item() * inputs.size(0)
+                running_loss += loss.item()
                 running_corrects += torch.sum(preds == labels)
             
             test_loss = running_loss / len(test_dataset)
