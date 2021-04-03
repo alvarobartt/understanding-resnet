@@ -80,13 +80,16 @@ def train_resnet20_with_cifar10():
     config.epochs = EPOCHS
     config.batch_size = BATCH_SIZE
     config.architecture = 'resnet-20'
+    config.dataset = 'cifar-10'
+    config.transformations = True
+    config.input_shape = '[32,32,3]'
     config.criterion = 'cross_entropy_loss'
     config.optimizer = 'sgd'
     config.learning_rate = 1e-1
     config.channels_last = False
 
     # Initialize variables before training
-    best_loss = None
+    best_error = None
 
     # Training loop with wandb logging
     wandb.watch(model)
@@ -112,7 +115,8 @@ def train_resnet20_with_cifar10():
         
         train_loss = running_loss / len(train_dataset)
         train_acc = running_corrects.double() / len(train_dataset)
-        wandb.log({'train_loss': train_loss, 'train_acc': train_acc})
+        train_error = 1.0 - train_acc
+        wandb.log({'train_loss': train_loss, 'train_acc': train_acc, 'train_error': train_error})
 
         model.eval()
 
@@ -131,12 +135,13 @@ def train_resnet20_with_cifar10():
             
             test_loss = running_loss / len(test_dataset)
             test_acc = running_corrects.double() / len(test_dataset)
-            wandb.log({'test_loss': test_loss, 'test_acc': test_acc})
+            test_error = 1.0 - test_acc
+            wandb.log({'test_loss': test_loss, 'test_acc': test_acc, 'test_error': test_error})
 
-        if best_loss is None: best_loss = test_loss
-        if best_loss >= test_loss:
-            torch.save(model.state_dict(), os.path.join(wandb.run.dir, "checkpoint.pth"))
-            best_loss = test_loss
+        if best_error is None: best_error = test_error
+        if best_error >= test_error:
+            torch.save(model.state_dict(), os.path.join(wandb.run.dir, "resnet20-cifar10.pth"))
+            best_error = test_error
 
         scheduler.step()
 
