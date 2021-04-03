@@ -4,9 +4,8 @@ He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
 """
 
+import os
 import wandb
-
-from resnet import ResNet
 
 import torch
 
@@ -17,6 +16,8 @@ from torch.utils.data import DataLoader
 
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
+
+from resnet import ResNet
 
 
 def train_resnet20_with_cifar10():
@@ -83,12 +84,15 @@ def train_resnet20_with_cifar10():
     config.criterion = 'cross_entropy_loss'
     config.optimizer = 'sgd'
     config.learning_rate = 1e-1
+    config.channels_last = False
+
+    # Initialize variables before training
+    best_loss = None
 
     # Training loop with wandb logging
     wandb.watch(model)
     for epoch in range(1, EPOCHS+1):
-        running_loss = .0
-        running_corrects = .0
+        running_loss, running_corrects = .0, .0
         
         model.train()
 
@@ -107,10 +111,34 @@ def train_resnet20_with_cifar10():
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels)
         
-        epoch_loss = running_loss / len(train_dataset)
-        epoch_acc = running_corrects.double() / len(train_dataset)
-        wandb.log({'train_loss': epoch_loss, 'train_acc': epoch_acc})
-        
+        train_loss = running_loss / len(train_dataset)
+        train_acc = running_corrects.double() / len(train_dataset)
+        wandb.log({'epoch': epoch, 'train_loss': train_loss, 'train_acc': train_acc})
+
+        model.eval()
+
+        with torch.no_grad():
+            running_loss, running_corrects = .0, .0
+
+            for inputs, labels in test_dataloader:
+                inputs, labels = inputs.to(device), labels.to(device)
+
+                outputs = model(inputs)
+                _, preds = torch.max(outputs, 1)
+                loss = criterion(outputs, labels)
+
+                running_loss += loss.item() * inputs.size(0)
+                running_corrects += torch.sum(preds == labels)
+            
+            test_loss = running_loss / len(test_dataset)
+            test_acc = running_corrects.double() / len(test_dataset)
+            wandb.log({'epoch': epoch, 'test_loss': test_loss, 'test_acc': test_acc})
+
+        if best_loss is None: best_loss = test_loss
+        if best_loss >= test_loss:
+            torch.save(model.state_dict(), os.path.join(wandb.run.dir, "checkpoint.pth"))
+            best_loss = test_loss
+
         scheduler.step()
 
 
