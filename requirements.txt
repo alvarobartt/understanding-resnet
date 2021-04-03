@@ -8,3 +8,5 @@ jax
 jaxlib==0.1.64+cuda101
 # MXNet
 mxnet-cu101
+# Weights and Biases
+wandb

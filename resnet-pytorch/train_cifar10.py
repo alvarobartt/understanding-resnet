@@ -4,6 +4,8 @@ He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
 """
 
+import wandb
+
 from resnet import ResNet
 
 import torch
@@ -69,46 +71,47 @@ def train_resnet20_with_cifar10():
     optimizer = optim.SGD(model.parameters(), lr=1e-1, momentum=0.9, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=0.1)
 
-    # Weights and Biases Logging? -> TODO
+    # Start a new wandb run
+    wandb.init(project='resnet-pytorch', entity='alvarobartt')
+    
+    # Save the configuration for the current wandb run
+    config = wandb.config
+    config.iterations = ITERATIONS
+    config.epochs = EPOCHS
+    config.batch_size = BATCH_SIZE
+    config.architecture = 'resnet-20'
+    config.criterion = 'cross_entropy_loss'
+    config.optimizer = 'sgd'
+    config.learning_rate = 1e-1
 
-    # Initialize variables before training
-    smaller_test_error = 1.0
-
-    # Training loop
-    # List of TODOs
-    # - Train/Val split (45k/5k)
-    # - Include Kaiming He weight initilization
+    # Training loop with wandb logging
+    wandb.watch(model)
     for epoch in range(1, EPOCHS+1):
-        # best_acc = .0
-        # print(f"\nEpoch {epoch}/{EPOCHS}\n{'='*25}")
-        # for phase in ['train', 'val']:
-        #     running_loss = .0
-        #     running_corrects = .0
-        #     if phase == 'train': model.train()
-        #     if phase == 'val': model.eval()
-        #     for inputs, labels in loaders[phase]:
-        #         inputs, labels = inputs.to(device), labels.to(device)
+        running_loss = .0
+        running_corrects = .0
+        
+        model.train()
 
-        #         optimizer.zero_grad()
+        for inputs, labels in train_dataloader:
+            inputs, labels = inputs.to(device), labels.to(device)
 
-        #         with torch.set_grad_enabled(phase == 'train'):
-        #             outputs = model(inputs)
-        #             _, preds = torch.max(outputs, 1)
-        #             loss = criterion(outputs, labels)
-                    
-        #             if phase == 'train':
-        #                 loss.backward()
-        #                 optimizer.step()
+            optimizer.zero_grad()
 
-        #         running_loss += loss.item() * inputs.size(0)
-        #         running_corrects += torch.sum(preds == labels)
-        #     epoch_loss = running_loss / dataset_sizes[phase]
-        #     epoch_acc = running_corrects.double() / dataset_sizes[phase]
-        #     if phase == 'train': scheduler.step()
-        #     if phase == 'val' and epoch_acc > best_acc:
-        #         best_acc = epoch_acc
-        #         best_model_weights = deepcopy(model.state_dict())
-        #     print(f"Loss ({phase}): {epoch_loss}, Acc ({phase}): {epoch_acc}")
+            outputs = model(inputs)
+            _, preds = torch.max(outputs, 1)
+            loss = criterion(outputs, labels)
+
+            loss.backward()
+            optimizer.step()
+
+            running_loss += loss.item() * inputs.size(0)
+            running_corrects += torch.sum(preds == labels)
+        
+        epoch_loss = running_loss / len(train_dataset)
+        epoch_acc = running_corrects.double() / len(train_dataset)
+        wandb.log({'train_loss': epoch_loss, 'train_acc': epoch_acc})
+        
+        scheduler.step()
 
 
 if __name__ == '__main__':
