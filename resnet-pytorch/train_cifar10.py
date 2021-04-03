@@ -11,7 +11,6 @@ import torch
 
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 
 from torch.utils.data import DataLoader
 
@@ -67,7 +66,8 @@ def train_resnet20_with_cifar10():
     EPOCHS = ITERATIONS//len(train_dataloader)
     LR_MILESTONES = [32000//len(train_dataloader), 48000//len(train_dataloader)]
 
-    # Define the optimizer, and the learning rate scheduler
+    # Define the loss function, the optimizer, and the learning rate scheduler
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=1e-1, momentum=0.9, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=0.1)
 
@@ -102,12 +102,12 @@ def train_resnet20_with_cifar10():
 
             outputs = model(inputs)
             _, preds = torch.max(outputs, 1)
-            loss = F.nll_loss(outputs, labels)
+            loss = criterion(outputs, labels)
 
             loss.backward()
             optimizer.step()
 
-            running_loss += loss.item()
+            running_loss += (loss.item() * inputs.size(0))
             running_corrects += torch.sum(preds == labels)
         
         train_loss = running_loss / len(train_dataset)
@@ -124,9 +124,9 @@ def train_resnet20_with_cifar10():
 
                 outputs = model(inputs)
                 _, preds = torch.max(outputs, 1)
-                loss = F.nll_loss(outputs, labels)
+                loss = criterion(outputs, labels)
 
-                running_loss += loss.item()
+                running_loss += (loss.item() * inputs.size(0))
                 running_corrects += torch.sum(preds == labels)
             
             test_loss = running_loss / len(test_dataset)
