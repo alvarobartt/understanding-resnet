@@ -113,7 +113,7 @@ def train_resnet20_with_cifar10():
         
         train_loss = running_loss / len(train_dataset)
         train_acc = running_corrects.double() / len(train_dataset)
-        wandb.log({'epoch': epoch, 'train_loss': train_loss, 'train_acc': train_acc})
+        wandb.log({'train_loss': train_loss, 'train_acc': train_acc})
 
         model.eval()
 
@@ -132,7 +132,7 @@ def train_resnet20_with_cifar10():
             
             test_loss = running_loss / len(test_dataset)
             test_acc = running_corrects.double() / len(test_dataset)
-            wandb.log({'epoch': epoch, 'test_loss': test_loss, 'test_acc': test_acc})
+            wandb.log({'test_loss': test_loss, 'test_acc': test_acc})
 
         if best_loss is None: best_loss = test_loss
         if best_loss >= test_loss:
