@@ -131,5 +131,8 @@ dmypy.json
 # CIFAR10 Dataset
 data/
 
+# Weights and Biases (wanbd) Logs
+wandb/
+
 # VSCode Files
 .vscode
