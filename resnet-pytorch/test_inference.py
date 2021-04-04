@@ -73,35 +73,35 @@ def convert_model_to_channels_last():
 def test_inference(channels_last: bool = False):
     total_time = .0
 
-    for inputs, _ in test_dataloader:
-        inputs = inputs.to(device)
-        if channels_last: inputs.contiguous(memory_format=torch.channels_last)
+    with torch.no_grad():
+        for inputs, _ in test_dataloader:
+            inputs = inputs.to(device)
+            if channels_last: inputs.contiguous(memory_format=torch.channels_last)
 
-        start_time = time()
-        with torch.no_grad():
+            start_time = time()
             _ = model(inputs)
-        total_time += (time() - start_time)
-    
+            total_time += (time() - start_time)
+
     return total_time
 
 
 if __name__ == '__main__':
     start_time = time()
     load_pretrained_resnet20()
-    print(f"Pre-trained ResNet20 model loaded in: {(time() - start_time):.3f}s")
+    print(f"Pre-trained ResNet20 model loaded in {(time() - start_time):.3f}s")
 
     # Warmup model with a simple random inference
     x = torch.randn((1, 3, 32, 32)).to(device)
-    with torch.no_grad():
-        _ = model(x)
+    with torch.no_grad(): _ = model(x)
 
     BATCH_SIZE = 128
 
     start_time = time()
     load_test_cifar10_dataset(batch_size=BATCH_SIZE)
-    print(f"CIFAR10 test DataLoader loaded in: {(time() - start_time):.3f}s")
+    print(f"CIFAR10 test DataLoader loaded in {(time() - start_time):.3f}s, with a batch size of {BATCH_SIZE}")
 
     num_batches = math.ceil(len(test_dataloader.dataset)/BATCH_SIZE)
+    print(f"Number of batches/steps is {num_batches}")
 
     total_time = test_inference(channels_last=False)
     print(f"Inference using contiguous memory allocation took: {total_time:.3f}s ({(total_time/num_batches):.4f}s/step)")
