@@ -9,6 +9,8 @@ but also the implementation of the ResNet architecture written in PyTorch, MXNet
 Additionally, here you will also find the ResNet20 trained with CIFAR10, as proposed by the
 authors; which is the smallest ResNet described in the original paper.
 
+---
+
 ## :crystal_ball: Future Tasks
 
 * [X] PyTorch Training for CIFAR10 using ResNet20
@@ -19,6 +21,8 @@ authors; which is the smallest ResNet described in the original paper.
 * [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
 * [ ] Compare the inference time depending on the memory-storage option (contiguous, channels last)
 * [X] Use Weights and Biases `wandb` to track the experiments
+
+---
 
 ## :notebook: Explanation
 
@@ -73,6 +77,8 @@ architectures for the ImageNet problem such as VGG or GoogLeNet. In addition to 
 they also proved that when using deep residual learning compared to plain CNNs, the 
 training error was decreasing when adding more layers, which was paliating the degradation 
 problem.
+
+---
 
 ## :pushpin: Useful concepts
 
@@ -130,6 +136,8 @@ that the training accuracy will be at least as good in the deeper net as in its 
 
 * __ResNet Block as a Bottleneck design__: bla
 
+---
+
 ## :question: Why ResNets work?
 
 Here you have a curated list of useful videos you can watch while I summarize all the information in a clear and concise way, 
@@ -139,49 +147,6 @@ so as to understand why ResNets work and how are ResNets used in practice:
 - [Deep Residual Learning for Image Recognition (Paper Explained) - Yannic Kilcher](https://www.youtube.com/watch?v=GWt6Fu05voI)
 - [ResNets - DeepLearning.AI](https://www.youtube.com/watch?v=ZILIbUvp5lk)
 - [Why ResNets work? - DeepLearning.AI](https://www.youtube.com/watch?v=RYth6EbBUqM)
-
-## :test_tube: ResNet-20 Implementation
-
-In order to understand how does the ResNet architecture work, we will be implementing the simplest version of it, which
-is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
-neural network and deep residual network, and the functionality of the 
-"_shortcut connections_" in the residual building blocks.
-
-### :open_file_folder: Dataset
-
-* Input images are 32x32px (width x height) in RGB format (3 channels), which is a Tensor of shape `torch.Tensor([3, 32, 32])`.
-
-* The dataset consists of 50k training images and 10k test images, classified in 10 classes.
-
-* The data will be augmented padding 4px on each side, followed by a random crop of a window of shape 32x32 either from the 
-original image or from its horizontal flip; just for the training data.
-
-### :brain: Architecture
-
-* The architecture is summarized in the following table, where `n=3` leading to a neural network with 20 weighted layers.
-
-  | output map size | 32 x 32 | 16 x 16 | 8 x 8 |
-  |-----------------|---------|---------|-------|
-  | # layers        | 1 + 2n  | 2n      | 2n    |
-  | # filters       | 16      | 32      | 64    |
-  
-* Both, the plain neural network and the residual neural network, have the exact same architecture.
-
-* The convolutional filters to be applied are 16, 32, and 64; so that the size of the input image goes 
-from 32x32 to 16x16, and then to 8x8.
-
-* The neural network starts off with a convolutional layer which applies a 3x3 convolution, resulting in 
-16 out channels.
-
-* Then we will include the residual blocks (the basic, not the bottleneck ones), that is a stack of `6*n`
-layers with 3x3 convolutions, that contains `2n` layers for each feature map size.
-
-* The subsampling/downsampling is performed by convolutions with a stride of 2, instead of using pooling operations. 
-A comparison between both approaches can be found at: 
-[Stackexchange: Pooling vs. stride for downsampling](https://stats.stackexchange.com/questions/387482/pooling-vs-stride-for-downsampling/387522)
-
-* Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
-that stands for the 10 classes of the CIFAR10 dataset.
 
 ---
 
