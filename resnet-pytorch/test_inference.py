@@ -43,20 +43,26 @@ def inference_over_channel_last_images():
 
 
 if __name__ == '__main__':
+    start_time = time()
     model = load_pretrained_resnet20()
+    print(f"Pre-trained ResNet20 model loaded in: {time() - start_time}s")
 
-    x = torch.randn((64, 3, 32, 32)).to('cuda')
-    print(x.stride())
+    x = torch.randn((1024, 3, 32, 32)).to('cuda')
+    print(f"A contiguous Tensor's stride (# jumps in all the dims) looks like {x.stride()} in memory")
     
     start_time = time()
     y = model(x)
-    print(f"Elapsed time is: {time() - start_time}")
+    print(f"Contiguous Tensor's inference time is: {time() - start_time}s")
+    del y
     
+    # Reference: https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html#converting-existing-models
+    start_time = time()
     model = model.to(memory_format=torch.channels_last)
+    print(f"ResNet20 model converted to channels-last in: {time() - start_time}s")
 
     x = x.contiguous(memory_format=torch.channels_last)
-    print(x.stride())
+    print(f"A channels-last Tensor's stride (# jumps in all the dims) looks like {x.stride()} in memory")
 
     start_time = time()
     y = model(x)
-    print(f"Elapsed time is: {time() - start_time}")
+    print(f"Channels-last Tensor's inference time is: {time() - start_time}s")
