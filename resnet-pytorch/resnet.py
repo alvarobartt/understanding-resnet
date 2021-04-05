@@ -12,6 +12,8 @@ import torch.nn.functional as F
 
 from torch import Tensor
 
+from torch.hub import load_state_dict_from_url
+
 
 class BasicBlock(nn.Module):
     def __init__(self, in_channels: int, out_channels: int, stride: int) -> None:
@@ -88,9 +90,21 @@ class ResNet(nn.Module):
             init.kaiming_uniform_(m.weight, mode='fan_in', nonlinearity='relu')
  
 
+def resnet20(pretrained=False):
+    model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
+    if pretrained: model.load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth")
+    return model
+
+
+def resnet18(pretrained=False):
+    model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
+    if pretrained: raise NotImplementedError
+    return model
+
+
 if __name__ == "__main__":
     # CIFAR10 ResNet20
-    model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
+    model = resnet20()
     print(model)
     
     import torch
@@ -104,7 +118,7 @@ if __name__ == "__main__":
     print(sum(param.numel() for param in model.parameters() if param.requires_grad))
 
     # ImageNet ResNet18
-    model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
+    model = resnet18()
     print(model)
     
     x = torch.randn((1, 3, 224, 224))
