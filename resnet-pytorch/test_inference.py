@@ -13,6 +13,8 @@ import math
 
 import torch
 
+from torch.hub import load_state_dict_from_url
+
 from torch.utils.data import DataLoader
 
 from torchvision import transforms as T
@@ -34,8 +36,10 @@ def load_pretrained_resnet20():
     # Initiliaze ResNet20 for CIFAR10 and move it to the GPU (CPU if not available)
     model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
 
-    # Load the weights from the latest wandb run
-    model.load_state_dict(torch.load("wandb/latest-run/files/resnet20-cifar10.pth"))
+    # # Load the weights from the latest wandb run
+    # model.load_state_dict(torch.load("wandb/latest-run/files/resnet20-cifar10.pth"))
+    # # or load the weights from the latest GitHub Release
+    model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth"))
     
     # Move the model to the GPU as it was trained on a GPU
     # https://pytorch.org/tutorials/beginner/saving_loading_models.html#save-on-gpu-load-on-gpu

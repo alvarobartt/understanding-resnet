@@ -92,7 +92,7 @@ class ResNet(nn.Module):
 
 def resnet20(pretrained=False):
     model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
-    if pretrained: model.load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth")
+    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth"))
     return model
 
 
