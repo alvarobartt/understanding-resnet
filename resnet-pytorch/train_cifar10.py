@@ -5,6 +5,9 @@ https://arxiv.org/pdf/1512.03385.pdf
 """
 
 import os
+
+from math import ceil
+
 import wandb
 
 import torch
@@ -63,13 +66,16 @@ def train_resnet20_with_cifar10():
 
     # Define training parameters
     ITERATIONS = 64000
-    EPOCHS = ITERATIONS//len(train_dataloader)
-    LR_MILESTONES = [32000//len(train_dataloader), 48000//len(train_dataloader)]
+    EPOCHS = ceil(ITERATIONS/len(train_dataloader))
+    LR_MILESTONES = [
+        ceil(32000/len(train_dataloader)),
+        ceil(48000/len(train_dataloader))
+    ]
 
     # Define the loss function, the optimizer, and the learning rate scheduler
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=1e-1, momentum=0.9, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=0.1)
+    optimizer = optim.SGD(model.parameters(), lr=1e-1, momentum=9e-1, weight_decay=1e-4)
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=1e-1)
 
     # Start a new wandb run
     wandb.init(project='resnet-pytorch', entity='alvarobartt')
