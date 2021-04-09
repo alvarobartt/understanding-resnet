@@ -4,7 +4,7 @@ He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
 """
 
-from typing import List
+from typing import List, Tuple
 
 import torch.nn as nn
 import torch.nn.init as init
@@ -48,7 +48,9 @@ class ResNet(nn.Module):
         assert len(blocks) == 3 or len(blocks) == 4, "ResNet can either have `3` blocks for CIFAR10, or `4` for ImageNet"
         assert len(blocks) == len(filters), "# of blocks must match # of filters"
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=filters[0], kernel_size=3, stride=1, padding=1, bias=False)
+        kernel_size = 3 if len(blocks) == 3 else 7
+
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=filters[0], kernel_size=kernel_size, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(num_features=filters[0])
         
         self.rl1 = self._make_layers(num_blocks=blocks[0], planes=filters[0], subsampling=False)
@@ -56,7 +58,7 @@ class ResNet(nn.Module):
         self.rl3 = self._make_layers(num_blocks=blocks[2], planes=filters[1], subsampling=True)
         if len(blocks) == 4: self.rl4 = self._make_layers(num_blocks=blocks[3], planes=filters[2], subsampling=True)
         
-        self.fc1 = nn.Linear(filters[-1], num_classes)
+        self.fc = nn.Linear(filters[-1], num_classes)
 
         self.apply(self._init_weights)
 
@@ -68,7 +70,7 @@ class ResNet(nn.Module):
         if hasattr(self, 'rl4'): x = self.rl4(x)
         x = F.avg_pool2d(x, kernel_size=x.size()[3])
         x = x.view(x.size(0), -1)
-        x = F.log_softmax(self.fc1(x), dim=1)
+        x = F.log_softmax(self.fc(x), dim=1)
         return x
 
     def _make_layers(self, num_blocks: int, planes: int, subsampling: bool) -> nn.Sequential:
@@ -98,27 +100,28 @@ def resnet20(pretrained=False):
 
 def resnet18(pretrained=False):
     model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
-    if pretrained: raise NotImplementedError
+    if pretrained: model.load_state_dict(load_state_dict_from_url("https://download.pytorch.org/models/resnet18-5c106cde.pth"))
+    # if pretrained: raise NotImplementedError
     return model
 
 
 if __name__ == "__main__":
     # CIFAR10 ResNet20
-    model = resnet20()
-    print(model)
+    # model = resnet20()
+    # print(model)
     
     import torch
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(device)
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # print(device)
     
-    x = torch.randn((1, 3, 32, 32))
-    y = model(x)
+    # x = torch.randn((1, 3, 32, 32))
+    # y = model(x)
     
-    print(x.shape, y.shape)
-    print(sum(param.numel() for param in model.parameters() if param.requires_grad))
+    # print(x.shape, y.shape)
+    # print(sum(param.numel() for param in model.parameters() if param.requires_grad))
 
     # ImageNet ResNet18
-    model = resnet18()
+    model = resnet18(pretrained=True)
     print(model)
     
     x = torch.randn((1, 3, 224, 224))
