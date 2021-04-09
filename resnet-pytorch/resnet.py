@@ -97,10 +97,29 @@ def resnet20(pretrained=False):
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth"))
     return model
 
+def resnet32(pretrained=False):
+    model = ResNet(blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
+    if pretrained: raise NotImplementedError
+    return model
+
+def resnet44(pretrained=False):
+    model = ResNet(blocks=[7, 7, 7], filters=[16, 32, 64], num_classes=10)
+    if pretrained: raise NotImplementedError
+    return model
+
+def resnet56(pretrained=False):
+    model = ResNet(blocks=[9, 9, 9], filters=[16, 32, 64], num_classes=10)
+    if pretrained: raise NotImplementedError
+    return model
 
 def resnet18(pretrained=False):
     model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.2/resnet18-imagenet-ported.pth"))
+    return model
+
+def resnet34(pretrained=False):
+    model = ResNet(blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
+    if pretrained: raise NotImplementedError
     return model
 
 
@@ -120,7 +139,7 @@ if __name__ == "__main__":
     print(sum(param.numel() for param in model.parameters() if param.requires_grad))
 
     # ImageNet ResNet18
-    model = resnet18(pretrained=True)
+    model = resnet18()
     print(model)
     
     x = torch.randn((1, 3, 224, 224))

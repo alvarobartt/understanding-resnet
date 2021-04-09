@@ -136,3 +136,6 @@ wandb/
 
 # VSCode Files
 .vscode
+
+# PyTorch State Dict
+.pth
