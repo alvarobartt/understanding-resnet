@@ -7,12 +7,14 @@ https://download.pytorch.org/models/resnet18-5c106cde.pth
 
 from collections import OrderedDict
 
+import torch
+
 from torch.hub import load_state_dict_from_url
 
 from resnet import resnet18
 
 
-def port_resnet18_weights(url):
+def port_resnet18_weights(url: str, target_path: str) -> None:
     """Ports the pre-trained weights for ResNet-18 trained on ImageNet."""
     original_state_dict = load_state_dict_from_url(url)
     custom_state_dict = OrderedDict([])
@@ -25,6 +27,9 @@ def port_resnet18_weights(url):
     model = resnet18(pretrained=False)
     model.load_state_dict(custom_state_dict)
 
+    torch.save(model.state_dict(), target_path)
+
 
 if __name__ == '__main__':
-    port_resnet18_weights(url='https://download.pytorch.org/models/resnet18-5c106cde.pth')
+    port_resnet18_weights(url='https://download.pytorch.org/models/resnet18-5c106cde.pth',
+                          target_path='resnet18-imagenet-ported.pth')

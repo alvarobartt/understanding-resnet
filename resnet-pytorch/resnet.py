@@ -100,8 +100,7 @@ def resnet20(pretrained=False):
 
 def resnet18(pretrained=False):
     model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
-    # if pretrained: model.load_state_dict(load_state_dict_from_url("https://download.pytorch.org/models/resnet18-5c106cde.pth"))
-    if pretrained: raise NotImplementedError
+    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.2/resnet18-imagenet-ported.pth"))
     return model
 
 
