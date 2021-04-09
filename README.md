@@ -18,6 +18,11 @@ authors; which is the smallest ResNet described in the original paper.
 * [X] Compare the inference time depending on the memory-storage option (contiguous, channels last)
 * [X] Use Weights and Biases `wandb` to track the experiments
 * [ ] Include the Bottleneck block for ResNet
+* [ ] Add the block class as a parameter (BasicBlock or BottleneckBlock)
+* [ ] Move \_make\_layers from ResNet to BasicBlock and BottleneckBlock
+* [ ] Re-train ResNet20 and train ResNet34 for the first time, then update .pth
+* [ ] Check whether the expansion parameter is needed (probably just for Bottleneck)
+* [ ] Once implemented and understood, include some explanation on the Bottleneck blocks
 * [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
 * [ ] Implement ResNets using JAX
 * [ ] Implement ResNets using MXNet
