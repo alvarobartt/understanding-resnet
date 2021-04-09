@@ -100,25 +100,25 @@ def resnet20(pretrained=False):
 
 def resnet18(pretrained=False):
     model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
-    if pretrained: model.load_state_dict(load_state_dict_from_url("https://download.pytorch.org/models/resnet18-5c106cde.pth"))
-    # if pretrained: raise NotImplementedError
+    # if pretrained: model.load_state_dict(load_state_dict_from_url("https://download.pytorch.org/models/resnet18-5c106cde.pth"))
+    if pretrained: raise NotImplementedError
     return model
 
 
 if __name__ == "__main__":
     # CIFAR10 ResNet20
-    # model = resnet20()
-    # print(model)
+    model = resnet20()
+    print(model)
     
     import torch
-    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # print(device)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(device)
     
-    # x = torch.randn((1, 3, 32, 32))
-    # y = model(x)
+    x = torch.randn((1, 3, 32, 32))
+    y = model(x)
     
-    # print(x.shape, y.shape)
-    # print(sum(param.numel() for param in model.parameters() if param.requires_grad))
+    print(x.shape, y.shape)
+    print(sum(param.numel() for param in model.parameters() if param.requires_grad))
 
     # ImageNet ResNet18
     model = resnet18(pretrained=True)
