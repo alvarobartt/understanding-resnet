@@ -6,6 +6,8 @@ https://arxiv.org/pdf/1512.03385.pdf
 
 from typing import List, Tuple
 
+import torch
+
 import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
@@ -41,6 +43,36 @@ class BasicBlock(nn.Module):
         return x_
 
 
+class BottleneckBlock(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, stride: int) -> None:
+        super(BottleneckBlock, self).__init__()
+        
+        self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(num_features=out_channels)
+
+        self.conv2 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels, kernel_size=3, stride=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(num_features=out_channels)
+
+        self.conv3 = nn.Conv2d(in_channels=out_channels, out_channels=4*out_channels, kernel_size=1, stride=1, bias=False)
+        self.bn3 = nn.BatchNorm2d(num_features=out_channels)
+
+        self.shortcut = nn.Sequential()
+
+        if stride != 1 or in_channels != out_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels=in_channels, out_channels=4*out_channels, kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(num_features=out_channels)
+            )
+
+    def forward(self, x: Tensor) -> Tensor:
+        x_ = F.relu(self.bn1(self.conv1(x)))
+        x_ = F.relu(self.bn2(self.conv2(x_)))
+        x_ = self.bn3(self.conv3(x_))
+        x_ += self.shortcut(x)
+        x_ = F.relu(x_)
+        return x_
+
+
 class ResNet(nn.Module):
     def __init__(self, blocks: List[int], filters: List[int], num_classes: int) -> None:
         super(ResNet, self).__init__()
@@ -49,26 +81,32 @@ class ResNet(nn.Module):
         assert len(blocks) == len(filters), "# of blocks must match # of filters"
 
         kernel_size = 3 if len(blocks) == 3 else 7
+        stride = 1 if len(blocks) == 3 else 2 
+        padding = 1 if len(blocks) == 3 else 3
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=filters[0], kernel_size=kernel_size, stride=1, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=filters[0], kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
         self.bn1 = nn.BatchNorm2d(num_features=filters[0])
+
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         
         self.rl1 = self._make_layers(num_blocks=blocks[0], planes=filters[0], subsampling=False)
         self.rl2 = self._make_layers(num_blocks=blocks[1], planes=filters[0], subsampling=True)
         self.rl3 = self._make_layers(num_blocks=blocks[2], planes=filters[1], subsampling=True)
         if len(blocks) == 4: self.rl4 = self._make_layers(num_blocks=blocks[3], planes=filters[2], subsampling=True)
         
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(filters[-1], num_classes)
 
         self.apply(self._init_weights)
 
     def forward(self, x: Tensor) -> Tensor:
         x = F.relu(self.bn1(self.conv1(x)))
+        x = self.maxpool(x)
         x = self.rl1(x)
         x = self.rl2(x)
         x = self.rl3(x)
         if hasattr(self, 'rl4'): x = self.rl4(x)
-        x = F.avg_pool2d(x, kernel_size=x.size()[3])
+        x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         x = F.log_softmax(self.fc(x), dim=1)
         return x
