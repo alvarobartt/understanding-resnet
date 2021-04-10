@@ -4,7 +4,7 @@ He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Type, Union
 
 import torch
 
@@ -74,7 +74,7 @@ class BottleneckBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, blocks: List[int], filters: List[int], num_classes: int) -> None:
+    def __init__(self, block: Type[Union[BasicBlock, BottleneckBlock]], blocks: List[int], filters: List[int], num_classes: int) -> None:
         super(ResNet, self).__init__()
 
         assert len(blocks) == 3 or len(blocks) == 4, "ResNet can either have `3` blocks for CIFAR10, or `4` for ImageNet"
@@ -89,10 +89,10 @@ class ResNet(nn.Module):
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         
-        self.rl1 = self._make_layers(num_blocks=blocks[0], planes=filters[0], subsampling=False)
-        self.rl2 = self._make_layers(num_blocks=blocks[1], planes=filters[0], subsampling=True)
-        self.rl3 = self._make_layers(num_blocks=blocks[2], planes=filters[1], subsampling=True)
-        if len(blocks) == 4: self.rl4 = self._make_layers(num_blocks=blocks[3], planes=filters[2], subsampling=True)
+        self.rl1 = self._make_layers(block=block, num_blocks=blocks[0], planes=filters[0], subsampling=False)
+        self.rl2 = self._make_layers(block=block, num_blocks=blocks[1], planes=filters[0], subsampling=True)
+        self.rl3 = self._make_layers(block=block, num_blocks=blocks[2], planes=filters[1], subsampling=True)
+        if len(blocks) == 4: self.rl4 = self._make_layers(block=block, num_blocks=blocks[3], planes=filters[2], subsampling=True)
         
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(filters[-1], num_classes)
@@ -111,17 +111,17 @@ class ResNet(nn.Module):
         x = F.log_softmax(self.fc(x), dim=1)
         return x
 
-    def _make_layers(self, num_blocks: int, planes: int, subsampling: bool) -> nn.Sequential:
+    def _make_layers(self, block: Type[Union[BasicBlock, BottleneckBlock]], num_blocks: int, planes: int, subsampling: bool) -> nn.Sequential:
         layers = list()
         
         # "The subsampling is performed by convolutions with a stride of 2"
         if subsampling:
-            layers.append(BasicBlock(in_channels=planes, out_channels=planes*2, stride=2))
+            layers.append(block(in_channels=planes, out_channels=planes*2, stride=2))
             num_blocks -= 1
             planes *= 2
 
         for _ in range(num_blocks):
-            layers.append(BasicBlock(in_channels=planes, out_channels=planes, stride=1))
+            layers.append(block(in_channels=planes, out_channels=planes, stride=1))
 
         return nn.Sequential(*layers)
 
@@ -131,32 +131,32 @@ class ResNet(nn.Module):
  
 
 def resnet20(pretrained=False):
-    model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth"))
     return model
 
 def resnet32(pretrained=False):
-    model = ResNet(blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
     if pretrained: raise NotImplementedError
     return model
 
 def resnet44(pretrained=False):
-    model = ResNet(blocks=[7, 7, 7], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[7, 7, 7], filters=[16, 32, 64], num_classes=10)
     if pretrained: raise NotImplementedError
     return model
 
 def resnet56(pretrained=False):
-    model = ResNet(blocks=[9, 9, 9], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[9, 9, 9], filters=[16, 32, 64], num_classes=10)
     if pretrained: raise NotImplementedError
     return model
 
 def resnet18(pretrained=False):
-    model = ResNet(blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
+    model = ResNet(block=BasicBlock, blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.2/resnet18-imagenet-ported.pth"))
     return model
 
 def resnet34(pretrained=False):
-    model = ResNet(blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
+    model = ResNet(block=BasicBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: raise NotImplementedError
     return model
 

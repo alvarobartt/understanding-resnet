@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
 
-from resnet import ResNet
+from resnet import resnet20
 
 
 def train_resnet20_with_cifar10():
@@ -28,7 +28,7 @@ def train_resnet20_with_cifar10():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Initiliaze ResNet20 for CIFAR10 and move it to the GPU (CPU if not available)
-    model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
+    model = resnet20()
     model.to(device)
     
     # Count the total number of trainable parameters
