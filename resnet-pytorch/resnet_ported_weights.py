@@ -21,7 +21,7 @@ def port_resnet18_weights(url: str, target_path: str) -> None:
 
     for k, v in original_state_dict.items():
         if k.startswith('layer'): k = k.replace('layer', 'rl')
-        if k.__contains__('downsample'): k = k.replace('downsample', 'shortcut')
+        if k.__contains__('downsample'): k = k.replace('downsample', 'subsample')
         custom_state_dict[k] = v
 
     model = resnet18(pretrained=False)
