@@ -55,11 +55,11 @@ class BottleneckBlock(nn.Module):
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1, bias=False)
         self.bn1 = nn.BatchNorm2d(num_features=out_channels)
 
-        self.conv2 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels, kernel_size=3, stride=1, bias=False)
+        self.conv2 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(num_features=out_channels)
 
         self.conv3 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels * self.expansion, kernel_size=1, stride=1, bias=False)
-        self.bn3 = nn.BatchNorm2d(num_features=out_channels)
+        self.bn3 = nn.BatchNorm2d(num_features=out_channels * self.expansion)
 
         self.subsample = nn.Sequential()
 
@@ -103,7 +103,7 @@ class ResNet(nn.Module):
         if len(blocks) == 4: self.rl4 = self._make_layer(block=block, num_blocks=blocks[3], planes=filters[3], stride=2)
         
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(filters[-1], num_classes)
+        self.fc = nn.Linear(filters[-1] * block.expansion, num_classes)
 
         self.apply(self._init_weights)
 
@@ -123,7 +123,7 @@ class ResNet(nn.Module):
         layers = list()
 
         if stride != 1 or self.in_channels != planes * block.expansion:
-            layers.append(block(in_channels=self.in_channels, out_channels=planes * block.expansion, stride=stride))
+            layers.append(block(in_channels=self.in_channels, out_channels=planes, stride=stride))
         else:
             layers.append(block(in_channels=self.in_channels, out_channels=planes, stride=1))
 
@@ -177,25 +177,24 @@ def resnet50(pretrained=False) -> ResNet:
 
 if __name__ == "__main__":
     # CIFAR10 ResNet20
-    # model = resnet20()
-    # print(model)
+    model = resnet20()
+    print(model)
     
-    # import torch
-    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # print(device)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(device)
     
-    # x = torch.randn((1, 3, 32, 32))
-    # y = model(x)
+    x = torch.randn((1, 3, 32, 32))
+    y = model(x)
     
-    # print(x.shape, y.shape)
-    # print(sum(param.numel() for param in model.parameters() if param.requires_grad))
+    print(x.shape, y.shape)
+    print(sum(param.numel() for param in model.parameters() if param.requires_grad))
 
     # # ImageNet ResNet18
     model = resnet50()
     print(model)
     
-    # x = torch.randn((1, 3, 224, 224))
-    # y = model(x)
+    x = torch.randn((1, 3, 224, 224))
+    y = model(x)
     
-    # print(x.shape, y.shape)
-    # print(sum(param.numel() for param in model.parameters() if param.requires_grad))
+    print(x.shape, y.shape)
+    print(sum(param.numel() for param in model.parameters() if param.requires_grad))
