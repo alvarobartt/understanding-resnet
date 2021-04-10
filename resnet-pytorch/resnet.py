@@ -51,14 +51,14 @@ class BottleneckBlock(nn.Module):
 
     def __init__(self, in_channels: int, out_channels: int, stride: int) -> None:
         super(BottleneckBlock, self).__init__()
-        
+
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1, bias=False)
         self.bn1 = nn.BatchNorm2d(num_features=out_channels)
 
         self.conv2 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels, kernel_size=3, stride=1, bias=False)
         self.bn2 = nn.BatchNorm2d(num_features=out_channels)
 
-        self.conv3 = nn.Conv2d(in_channels=out_channels, out_channels=4*out_channels, kernel_size=1, stride=1, bias=False)
+        self.conv3 = nn.Conv2d(in_channels=out_channels, out_channels=out_channels * self.expansion, kernel_size=1, stride=1, bias=False)
         self.bn3 = nn.BatchNorm2d(num_features=out_channels)
 
         self.subsample = nn.Sequential()
@@ -124,11 +124,12 @@ class ResNet(nn.Module):
 
         if stride != 1 or self.in_channels != planes * block.expansion:
             layers.append(block(in_channels=self.in_channels, out_channels=planes * block.expansion, stride=stride))
+        else:
+            layers.append(block(in_channels=self.in_channels, out_channels=planes, stride=1))
 
         self.in_channels = planes * block.expansion
 
-        num_blocks -= len(layers)
-        for _ in range(num_blocks):
+        for _ in range(1, num_blocks):
             layers.append(block(in_channels=self.in_channels, out_channels=planes, stride=1))
 
         return nn.Sequential(*layers)
@@ -138,37 +139,37 @@ class ResNet(nn.Module):
             init.kaiming_uniform_(m.weight, mode='fan_in', nonlinearity='relu')
  
 
-def resnet20(pretrained=False):
+def resnet20(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth"))
     return model
 
-def resnet32(pretrained=False):
+def resnet32(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet44(pretrained=False):
+def resnet44(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[7, 7, 7], filters=[16, 32, 64], num_classes=10)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet56(pretrained=False):
+def resnet56(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[9, 9, 9], filters=[16, 32, 64], num_classes=10)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet18(pretrained=False):
+def resnet18(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.2/resnet18-imagenet-ported.pth"))
     return model
 
-def resnet34(pretrained=False):
+def resnet34(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet50(pretrained=False):
+def resnet50(pretrained=False) -> ResNet:
     model = ResNet(block=BottleneckBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: raise NotImplementedError
     return model
