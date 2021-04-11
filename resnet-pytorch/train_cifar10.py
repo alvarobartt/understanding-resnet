@@ -132,6 +132,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
             'train_error': train_error, 'train_time': train_time
         }, step=epoch)
 
+        scheduler.step()
+
         model.eval()
         start_time = time()
 
@@ -162,8 +164,6 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
         if best_error >= test_error:
             torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{model_name}-cifar10.pth"))
             best_error = test_error
-
-        scheduler.step()
 
     # Finish logging this wandb run
     # https://docs.wandb.ai/library/init#how-do-i-launch-multiple-runs-from-one-script

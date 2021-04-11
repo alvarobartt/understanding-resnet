@@ -149,7 +149,7 @@ that the training accuracy will be at least as good in the deeper net as in its 
 Here you have a curated list of useful videos you can watch while I summarize all the information in a clear and concise way, 
 so as to understand why ResNets work and how are ResNets used in practice:
 
-- [ResNets Explained](https://www.youtube.com/watch?v=sAzL4XMke80)
+- [ResNets Explained - Henry AI Labs](https://www.youtube.com/watch?v=sAzL4XMke80)
 - [Deep Residual Learning for Image Recognition (Paper Explained) - Yannic Kilcher](https://www.youtube.com/watch?v=GWt6Fu05voI)
 - [ResNets - DeepLearning.AI](https://www.youtube.com/watch?v=ZILIbUvp5lk)
 - [Why ResNets work? - DeepLearning.AI](https://www.youtube.com/watch?v=RYth6EbBUqM)

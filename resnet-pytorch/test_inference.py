@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
 
-from resnet import ResNet
+from resnet import resnet20
 
 
 def load_pretrained_resnet20():
@@ -34,7 +34,7 @@ def load_pretrained_resnet20():
     global model
 
     # Initiliaze ResNet20 for CIFAR10 and move it to the GPU (CPU if not available)
-    model = ResNet(blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
+    model = resnet20()
 
     # # Load the weights from the latest wandb run
     # model.load_state_dict(torch.load("wandb/latest-run/files/resnet20-cifar10.pth"))

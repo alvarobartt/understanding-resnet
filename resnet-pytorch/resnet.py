@@ -102,7 +102,7 @@ class ResNet(nn.Module):
         self.rl3 = self._make_layer(block=block, num_blocks=blocks[2], planes=filters[2], stride=2)
         if len(blocks) == 4: self.rl4 = self._make_layer(block=block, num_blocks=blocks[3], planes=filters[3], stride=2)
         
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.avgpool = nn.AvgPool2d(kernel_size=1)
         self.fc = nn.Linear(filters[-1] * block.expansion, num_classes)
 
         self.apply(self._init_weights)
