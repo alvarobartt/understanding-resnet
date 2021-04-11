@@ -6,6 +6,8 @@ https://arxiv.org/pdf/1512.03385.pdf
 
 import os
 
+from time import time
+
 from math import ceil
 
 import wandb
@@ -20,7 +22,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
 
-from resnet import ResNet, resnet20
+from resnet import ResNet, resnet20, resnet32
 
 
 def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
@@ -85,7 +87,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     config.epochs = EPOCHS
     config.batch_size = BATCH_SIZE
     config.architecture = model_name
-    config.dataset = 'cifar-10'
+    config.dataset = 'cifar10'
     config.transformations = True
     config.input_shape = '[32,32,3]'
     config.criterion = 'cross_entropy_loss'
@@ -102,6 +104,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
         running_loss, running_corrects = .0, .0
         
         model.train()
+        start_time = time()
 
         for inputs, labels in train_dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
@@ -121,9 +124,15 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
         train_loss = running_loss / len(train_dataset)
         train_acc = running_corrects.double() / len(train_dataset)
         train_error = 1.0 - train_acc
-        wandb.log({'train_loss': train_loss, 'train_acc': train_acc, 'train_error': train_error}, step=epoch)
+        train_time = time() - start_time
+
+        wandb.log({
+            'train_loss': train_loss, 'train_acc': train_acc,
+            'train_error': train_error, 'train_time': train_time
+        }, step=epoch)
 
         model.eval()
+        start_time = time()
 
         with torch.no_grad():
             running_loss, running_corrects = .0, .0
@@ -141,16 +150,21 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
             test_loss = running_loss / len(test_dataset)
             test_acc = running_corrects.double() / len(test_dataset)
             test_error = 1.0 - test_acc
-            wandb.log({'test_loss': test_loss, 'test_acc': test_acc, 'test_error': test_error}, step=epoch)
+            test_time = time() - start_time
+            
+            wandb.log({
+                'test_loss': test_loss, 'test_acc': test_acc,
+                'test_error': test_error, 'test_time': test_time
+            }, step=epoch)
 
         if best_error is None: best_error = test_error
         if best_error >= test_error:
-            torch.save(model.state_dict(), os.path.join(wandb.run.dir, "resnet20-cifar10.pth"))
+            torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{model_name}-cifar10.pth"))
             best_error = test_error
 
         scheduler.step()
 
 
 if __name__ == '__main__':
-    train_resnet_cifar10(model=resnet20(), model_name='resnet-20')
-    train_resnet_cifar10(model=resnet32(), model_name='resnet-32')
+    train_resnet_cifar10(model=resnet20(), model_name='resnet20')
+    train_resnet_cifar10(model=resnet32(), model_name='resnet32')
