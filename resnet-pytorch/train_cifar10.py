@@ -20,15 +20,14 @@ from torch.utils.data import DataLoader
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
 
-from resnet import resnet20
+from resnet import ResNet, resnet20
 
 
-def train_resnet20_with_cifar10():
+def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     # Check that GPU support is available
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Initiliaze ResNet20 for CIFAR10 and move it to the GPU (CPU if not available)
-    model = resnet20()
+    # Initiliaze ResNet for CIFAR10 and move it to the GPU (CPU if not available)
     model.to(device)
     
     # Count the total number of trainable parameters
@@ -85,7 +84,7 @@ def train_resnet20_with_cifar10():
     config.iterations = ITERATIONS
     config.epochs = EPOCHS
     config.batch_size = BATCH_SIZE
-    config.architecture = 'resnet-20'
+    config.architecture = model_name
     config.dataset = 'cifar-10'
     config.transformations = True
     config.input_shape = '[32,32,3]'
@@ -153,4 +152,5 @@ def train_resnet20_with_cifar10():
 
 
 if __name__ == '__main__':
-    train_resnet20_with_cifar10()
+    train_resnet_cifar10(model=resnet20(), model_name='resnet-20')
+    train_resnet_cifar10(model=resnet32(), model_name='resnet-32')
