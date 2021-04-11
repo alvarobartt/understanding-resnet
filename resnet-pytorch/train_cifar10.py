@@ -79,7 +79,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=1e-1)
 
     # Start a new wandb run
-    wandb.init(project='resnet-pytorch', entity='alvarobartt')
+    # https://docs.wandb.ai/library/init#how-do-i-launch-multiple-runs-from-one-script
+    run = wandb.init(project='resnet-pytorch', entity='alvarobartt', reinit=True)
     
     # Save the configuration for the current wandb run
     config = wandb.config
@@ -163,6 +164,10 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
             best_error = test_error
 
         scheduler.step()
+
+    # Finish logging this wandb run
+    # https://docs.wandb.ai/library/init#how-do-i-launch-multiple-runs-from-one-script
+    run.finish()
 
 
 if __name__ == '__main__':
