@@ -5,9 +5,10 @@
 __TL;DR__ In Residual Learning the layers are reformulated as learning residual functions with
 reference to the layer inputs. These networks are easier to optimize, and can gain accuracy
 from considerably increased depth. Along this repository not just an explanation is provided
-but also the implementation of the ResNet architecture written in PyTorch, MXNet and JAX. 
-Additionally, here you will also find the ResNet20 trained with CIFAR10, as proposed by the
-authors; which is the smallest ResNet described in the original paper.
+but also the implementation of the original ResNet architecture written in PyTorch. 
+Additionally, here you will also find both the ResNet20 & ResNet32 trained with CIFAR10, as proposed by the
+authors; which are some of the smallest ResNets described in the original paper. And, also some
+ported weights for the bigger ResNets trained with ImageNet.
 
 ---
 
@@ -17,11 +18,10 @@ authors; which is the smallest ResNet described in the original paper.
 * [X] Upload weights to GitHub Releases
 * [X] Compare the inference time depending on the memory-storage option (contiguous, channels last)
 * [X] Use Weights and Biases `wandb` to track the experiments
-* [ ] Include the Bottleneck block for ResNet
+* [X] Include the Bottleneck block for ResNet
 * [X] Add the block class as a parameter (BasicBlock or BottleneckBlock)
-* [ ] Move \_make\_layers from ResNet to BasicBlock and BottleneckBlock
-* [ ] Re-train ResNet20 and train ResNet34 for the first time, then update .pth
-* [ ] Check whether the expansion parameter is needed (probably just for Bottleneck)
+* [X] Re-train ResNet20 and train ResNet34 for the first time, then update .pth
+* [X] Check whether the expansion parameter is needed (probably just for Bottleneck)
 * [ ] Once implemented and understood, include some explanation on the Bottleneck blocks
 * [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
 * [ ] Implement ResNets using JAX

@@ -146,7 +146,7 @@ def resnet20(pretrained=False) -> ResNet:
 
 def resnet32(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
-    if pretrained: raise NotImplementedError
+    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet32-cifar10.pth"))
     return model
 
 def resnet44(pretrained=False) -> ResNet:
