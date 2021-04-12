@@ -78,6 +78,16 @@ same; and that in order to see advantages, the residual function should involve 
 least 2 convolutional layers (experiments with 1 convolutional layer showed no great
 improvement/advantage over plain CNNs).
 
+__The bottleneck blocks__ bla bla bla
+
+<p align="center">
+  <img width="550" height="250" src="https://user-images.githubusercontent.com/36760800/114392408-05878080-9b99-11eb-9999-f37b87cdc348.png"/>
+</p>
+
+<p align="center">
+  <i>Source: <a href="https://arxiv.org/abs/1512.03385">Figure 5: A deeper residual function F for ImageNet. Left: a building block (on 56×56 feature maps) as in  ResNet-34. Right: a “bottleneck” building block for ResNet-50/101/152. (courtesy of Kaiming He et al.)</a></i>
+</p>
+
 The authors proved that deep residual learning improved the performance of other CNN 
 architectures for the ImageNet problem such as VGG or GoogLeNet. In addition to this, 
 they also proved that when using deep residual learning compared to plain CNNs, the 
