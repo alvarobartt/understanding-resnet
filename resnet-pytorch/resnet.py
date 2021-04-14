@@ -102,7 +102,7 @@ class ResNet(nn.Module):
         self.rl3 = self._make_layer(block=block, num_blocks=blocks[2], planes=filters[2], stride=2)
         if len(blocks) == 4: self.rl4 = self._make_layer(block=block, num_blocks=blocks[3], planes=filters[3], stride=2)
         
-        self.avgpool = nn.AvgPool2d(kernel_size=1)
+        self.avgpool = nn.AdaptiveAvgPool2d(output_size=1)
         self.fc = nn.Linear(filters[-1] * block.expansion, num_classes)
 
         self.apply(self._init_weights)
@@ -115,8 +115,8 @@ class ResNet(nn.Module):
         x = self.rl3(x)
         if hasattr(self, 'rl4'): x = self.rl4(x)
         x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
-        x = F.log_softmax(self.fc(x), dim=1)
+        x = torch.flatten(x, 1)
+        x = self.fc(x) # Removed softmax: https://discuss.pytorch.org/t/resnet-last-layer-modification/33530/2
         return x
 
     def _make_layer(self, block: Type[Union[BasicBlock, BottleneckBlock]], num_blocks: int, planes: int, stride: int) -> nn.Sequential:
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     print(x.shape, y.shape)
     print(sum(param.numel() for param in model.parameters() if param.requires_grad))
 
-    # # ImageNet ResNet18
+    # ImageNet ResNet18
     model = resnet50()
     print(model)
     
