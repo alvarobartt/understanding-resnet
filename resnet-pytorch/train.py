@@ -38,7 +38,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
 
     # Define the mean/std normalization values (https://gist.github.com/weiaicunzai/e623931921efefd4c331622c344d8151#gistcomment-2851662)
     norm_mean = (0.4914, 0.4822, 0.4465)
-    norm_std= (0.2470, 0.2435, 0.2616)
+    norm_std= (0.247, 0.2435, 0.2616)
 
     # Initialize/Define train transformation
     train_transform = T.Compose([
@@ -55,7 +55,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     ])
 
     # Define the batch size before preparing the dataloaders
-    BATCH_SIZE = 64
+    BATCH_SIZE = 128
 
     # Load CIFAR10 train dataset (transform it too), and initialize dataloader
     train_dataset = CIFAR10(root="data", train=True, download=True, transform=train_transform)
