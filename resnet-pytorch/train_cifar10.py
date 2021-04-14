@@ -95,6 +95,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     config.optimizer = 'sgd'
     config.learning_rate = 1e-1
     config.channels_last = False
+    config.changelog = 'removed softmax in last fc layer and used AdaptiveAvgPool2d'
 
     # Initialize variables before training
     best_error = None

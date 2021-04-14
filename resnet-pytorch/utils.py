@@ -15,7 +15,13 @@ from resnet import resnet18
 
 
 def port_resnet18_weights(url: str, target_path: str) -> None:
-    """Ports the pre-trained weights for ResNet-18 trained on ImageNet."""
+    """Ports the pre-trained weights for ResNet-18 trained on ImageNet.
+    
+    PyTorch image models, scripts, pretrained weights by Ross Wightman
+    https://github.com/rwightman/pytorch-image-models
+    https://download.pytorch.org/models/resnet18-5c106cde.pth
+    https://github.com/alvarobartt/understanding-resnet/releases/download/v0.2/resnet18-imagenet-ported.pth
+    """
     original_state_dict = load_state_dict_from_url(url)
     custom_state_dict = OrderedDict([])
 
