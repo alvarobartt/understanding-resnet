@@ -78,7 +78,11 @@ same; and that in order to see advantages, the residual function should involve 
 least 2 convolutional layers (experiments with 1 convolutional layer showed no great
 improvement/advantage over plain CNNs).
 
-__The bottleneck blocks__ bla bla bla
+__The bottleneck block design__ is a modification of the original building blocks proposed previously,
+so that each residual function instead of using a stack of 2 convolutional layers now it will use a stack
+of 3, which have a kernel size of 1x1, 3x3, and 1x1, respectively. The 1x1 convolutions are the ones in
+charge of first reducing and then increasing the dimensions, which is called the restoration process. So that
+the 3x3 convolution is left as a bottleneck with smaller input and output dimensions.
 
 <p align="center">
   <img width="550" height="250" src="https://user-images.githubusercontent.com/36760800/114392408-05878080-9b99-11eb-9999-f37b87cdc348.png"/>
@@ -87,6 +91,10 @@ __The bottleneck blocks__ bla bla bla
 <p align="center">
   <i>Source: <a href="https://arxiv.org/abs/1512.03385">Figure 5: A deeper residual function F for ImageNet. Left: a building block (on 56×56 feature maps) as in  ResNet-34. Right: a “bottleneck” building block for ResNet-50/101/152. (courtesy of Kaiming He et al.)</a></i>
 </p>
+
+The bottleneck building blocks are used in the bigger architectures of ResNet, as they reduce the 
+number of parameters and the amount of matrix multiplications to be calculated, so that the depth of the
+neural network can be increased, but using less parameters than with the original residual blocks.
 
 The authors proved that deep residual learning improved the performance of other CNN 
 architectures for the ImageNet problem such as VGG or GoogLeNet. In addition to this, 
@@ -148,9 +156,9 @@ so that the original mapping can be recasted to `F(x) + x`; in the worst case wh
 0 (let's assume we are using ReLU as the activation function), we will still keep the residual mapping `x`; so 
 that the training accuracy will be at least as good in the deeper net as in its shallower counterpart.
 
-* __Kaiming He Weight Initialization__: bla -> More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
-
 * __ResNet Block as a Bottleneck design__: bla
+
+* __Kaiming He Weight Initialization__: bla -> More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
 
 ---
 
