@@ -76,3 +76,19 @@ def port_resnet_weights_from_timm(variant: str) -> ResNet:
         raise Exception(f"state_dict could not be ported as it can't be loaded with exception: {e}")
 
     return model
+
+
+def convert_model_to_channels_last():
+    return None
+
+
+def convert_inputs_to_channels_last():
+    return None
+
+
+def convert_model_to_contiguous():
+    return None
+
+
+def warmup_model():
+    return None
