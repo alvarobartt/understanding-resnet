@@ -22,8 +22,12 @@ ported weights for the bigger ResNets trained with ImageNet.
 * [X] Add the block class as a parameter (BasicBlock or BottleneckBlock)
 * [X] Re-train ResNet20 and train ResNet34 for the first time, then update .pth
 * [X] Check whether the expansion parameter is needed (probably just for Bottleneck)
-* [ ] Once implemented and understood, include some explanation on the Bottleneck blocks
+* [X] Once implemented and understood, include some explanation on the Bottleneck blocks
 * [ ] Split data 45k/5k before training!
+* [ ] Improve training in train.py
+* [ ] Move all the utilities to utils.py
+* [ ] Include the explanation on the implementation, training and usage of resnet-pytorch
+* [ ] Define the tests in GitHub Actions (look for useful resources to do so in a nice way)
 * [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
 * [ ] Implement ResNets using JAX
 * [ ] Implement ResNets using MXNet

@@ -17,6 +17,9 @@ from torch import Tensor
 from torch.hub import load_state_dict_from_url
 
 
+__all__ = ['BasicBlock', 'BottleneckBlock', 'ResNet']
+
+
 class BasicBlock(nn.Module):
     expansion: int = 1
 
