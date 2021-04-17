@@ -49,18 +49,18 @@ MEAN_NORMALIZATION = (0.4914, 0.4822, 0.4465)
 STD_NORMALIZATION = (0.247, 0.2435, 0.2616)
 
 
-def port_resnet_weights_from_timm(variant: str) -> ResNet:
+def port_resnet_weights(variant: str) -> ResNet:
     """Ports the pre-trained weights for any ResNet v1 model from timm and/or PyTorch.
 
     Example:
-        >>> from utils import port_resnet_weights_from_timm
-        >>> model = port_resnet_weights_from_timm(variant="resnet18")
+        >>> from utils import port_resnet_weights
+        >>> model = port_resnet_weights(variant="resnet18")
         >>> import torch
-        >>> torch.save(model.state_dict(), "resnet18-ported-imagenet.pth")
+        >>> torch.save(model.state_dict(), "resnet18-imagenet-ported.pth")
     
-    Reference:
-        PyTorch image models, scripts, pretrained weights by Ross Wightman @ rwightman on GitHub
-        https://github.com/rwightman/pytorch-image-models
+    References:
+        [1] PyTorch image models, scripts, pretrained weights https://github.com/rwightman/pytorch-image-models
+        [2] torchvision: Datasets, Transforms and Models specific to Computer Vision https://github.com/pytorch/vision 
     """
 
     assert variant in VARIANTS.keys()
