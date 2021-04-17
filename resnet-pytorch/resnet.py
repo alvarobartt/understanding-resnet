@@ -7,7 +7,6 @@ https://arxiv.org/pdf/1512.03385.pdf
 from typing import List, Tuple, Type, Union
 
 import torch
-
 import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
@@ -194,28 +193,3 @@ def resnet152(pretrained=False) -> ResNet:
     model = ResNet(block=BottleneckBlock, blocks=[3, 8, 36, 3], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: raise NotImplementedError
     return model
-
-
-if __name__ == "__main__":
-    # CIFAR10 ResNet20
-    model = resnet20()
-    print(model)
-    
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(device)
-    
-    x = torch.randn((1, 3, 32, 32))
-    y = model(x)
-    
-    print(x.shape, y.shape)
-    print(sum(param.numel() for param in model.parameters() if param.requires_grad))
-
-    # ImageNet ResNet18
-    model = resnet50()
-    print(model)
-    
-    x = torch.randn((1, 3, 224, 224))
-    y = model(x)
-    
-    print(x.shape, y.shape)
-    print(sum(param.numel() for param in model.parameters() if param.requires_grad))

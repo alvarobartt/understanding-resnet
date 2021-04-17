@@ -97,6 +97,42 @@ def convert_model_to_contiguous():
 def warmup_model():
     return None
 
+
+def count_trainable_parameters(model: nn.Module) -> int:
+    """Counts the total number of trainable parameters of a net."""
+    return sum(param.numel() for param in model.parameters() if param.requires_grad)
+
+
+def count_layers(model: nn.Module) -> int:
+    """Counts the total number of layers of a net."""
+    return len(list(filter(lambda param: param.requires_grad and len(param.data.size()) > 1, model.parameters())))
+
+
+# if __name__ == "__main__":
+#     # CIFAR10 ResNet20
+#     model = resnet20()
+#     print(model)
+    
+#     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+#     print(device)
+    
+#     x = torch.randn((1, 3, 32, 32))
+#     y = model(x)
+    
+#     print(x.shape, y.shape)
+#     print(sum(param.numel() for param in model.parameters() if param.requires_grad))
+
+#     # ImageNet ResNet18
+#     model = resnet50()
+#     print(model)
+    
+#     x = torch.randn((1, 3, 224, 224))
+#     y = model(x)
+    
+#     print(x.shape, y.shape)
+#     print(sum(param.numel() for param in model.parameters() if param.requires_grad))
+
+
 # """
 # Compare the inference time of the pretrained ResNet20 over the test set of CIFAR10 
 # using both `contiguous` (default) and `channels-last` memory allocation formats.
