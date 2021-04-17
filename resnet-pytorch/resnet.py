@@ -138,18 +138,17 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def _init_weights(self, m):
-        if isinstance(m, nn.Linear) or isinstance(m, nn.Conv2d):
-            init.kaiming_uniform_(m.weight, mode='fan_in', nonlinearity='relu')
+        if isinstance(m, nn.Conv2d): init.kaiming_uniform_(m.weight, mode='fan_out', nonlinearity='relu')
  
 
 def resnet20(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
-    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet20-cifar10.pth"))
+    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet20-cifar10.pth"))
     return model
 
 def resnet32(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
-    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1/resnet32-cifar10.pth"))
+    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32-cifar10.pth"))
     return model
 
 def resnet44(pretrained=False) -> ResNet:
@@ -164,7 +163,7 @@ def resnet56(pretrained=False) -> ResNet:
 
 def resnet18(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
-    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.2/resnet18-imagenet-ported.pth"))
+    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-imagenet/resnet18-imagenet-ported.pth"))
     return model
 
 def resnet34(pretrained=False) -> ResNet:
