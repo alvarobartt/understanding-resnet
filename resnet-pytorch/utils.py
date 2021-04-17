@@ -11,14 +11,15 @@ Some of this functions include:
 
 from __future__ import absolute_import
 
+from typing import Tuple
+
 from collections import OrderedDict
 
 import torch
 
 from torch.hub import load_state_dict_from_url
 
-from resnet import ResNet
-from resnet import resnet18, resnet34, resnet50
+from resnet import ResNet, resnet18, resnet34, resnet50, resnet101, resnet152
 
 VARIANTS = {
     "resnet18": {
@@ -32,6 +33,14 @@ VARIANTS = {
     "resnet50": {
         "url": "https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-weights/resnet50_ram-a26f946b.pth",
         "model": resnet50
+    },
+    "resnet101": {
+        "url": "https://download.pytorch.org/models/resnet101-63fe2227.pth",
+        "model": resnet101
+    },
+    "resnet152": {
+        "url": "https://download.pytorch.org/models/resnet152-394f9c45.pth",
+        "model": resnet152
     }
 }
 
@@ -41,7 +50,7 @@ STD_NORMALIZATION = (0.247, 0.2435, 0.2616)
 
 
 def port_resnet_weights_from_timm(variant: str) -> ResNet:
-    """Ports the pre-trained weights for any ResNet v1 model from timm.
+    """Ports the pre-trained weights for any ResNet v1 model from timm and/or PyTorch.
 
     Example:
         >>> from utils import port_resnet_weights_from_timm
@@ -94,16 +103,27 @@ def convert_model_to_contiguous():
     return None
 
 
-def warmup_model():
-    return None
+def warmup_model(model: ResNet, input_size: Tuple[int, int, int], batch_size: int) -> None:
+    """Warms up the model before running evaluating the inference time."""
+    assert batch_size > 0
+    
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    model = model.to(device)
+    model.eval()
+    
+    inputs = torch.randn((batch_size,)+input_size)
+    inputs = inputs.to(device)
+
+    with torch.no_grad(): _ = model(inputs)
 
 
-def count_trainable_parameters(model: nn.Module) -> int:
+def count_trainable_parameters(model: ResNet) -> int:
     """Counts the total number of trainable parameters of a net."""
     return sum(param.numel() for param in model.parameters() if param.requires_grad)
 
 
-def count_layers(model: nn.Module) -> int:
+def count_layers(model: ResNet) -> int:
     """Counts the total number of layers of a net."""
     return len(list(filter(lambda param: param.requires_grad and len(param.data.size()) > 1, model.parameters())))
 
