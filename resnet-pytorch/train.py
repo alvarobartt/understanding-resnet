@@ -4,6 +4,8 @@ He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
 """
 
+from __future__ import absolute_import
+
 import os
 
 from time import time
@@ -22,35 +24,38 @@ from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
 
 from resnet import ResNet, resnet20, resnet32
+from utils import select_device, count_trainable_parameters, count_layers
+from utils import MEAN_NORMALIZATION, STD_NORMALIZATION
 
 
 def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     # Check that GPU support is available
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device(select_device())
 
     # Initiliaze ResNet for CIFAR10 and move it to the GPU (CPU if not available)
     model.to(device)
     
     # Count the total number of trainable parameters
-    trainable_parameters = sum(param.numel() for param in model.parameters() if param.requires_grad)
+    trainable_parameters = count_trainable_parameters()
     print(f"# of Trainable Parameters: {trainable_parameters}")
 
-    # Define the mean/std normalization values (https://gist.github.com/weiaicunzai/e623931921efefd4c331622c344d8151#gistcomment-2851662)
-    norm_mean = (0.4914, 0.4822, 0.4465)
-    norm_std= (0.247, 0.2435, 0.2616)
+    # Count the total number of layers
+    total_layers = count_layers()
+    print(f"# of Layers: {total_layers}")
 
     # Initialize/Define train transformation
+    # TODO(alvarobartt): train/val split to train just with 45k random images
     train_transform = T.Compose([
         T.RandomHorizontalFlip(),
         T.RandomCrop(size=(32, 32), padding=4),
         T.ToTensor(),
-        T.Normalize(mean=norm_mean, std=norm_std)
+        T.Normalize(mean=MEAN_NORMALIZATION, std=STD_NORMALIZATION)
     ])
 
     # Initialize/Define test transformation
     test_transform = T.Compose([
         T.ToTensor(),
-        T.Normalize(mean=norm_mean, std=norm_std)
+        T.Normalize(mean=MEAN_NORMALIZATION, std=STD_NORMALIZATION)
     ])
 
     # Define the batch size before preparing the dataloaders
@@ -64,7 +69,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     test_dataset = CIFAR10(root="data", train=False, download=True, transform=test_transform)
     test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    # Define training parameters
+    # Define training parameters as described in the original paper
     ITERATIONS = 64000
     EPOCHS = ceil(ITERATIONS/len(train_dataloader))
     LR_MILESTONES = [
