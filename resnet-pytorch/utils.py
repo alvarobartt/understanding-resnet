@@ -62,7 +62,6 @@ def port_resnet_weights(variant: str) -> ResNet:
         [1] PyTorch image models, scripts, pretrained weights https://github.com/rwightman/pytorch-image-models
         [2] torchvision: Datasets, Transforms and Models specific to Computer Vision https://github.com/pytorch/vision 
     """
-
     assert variant in VARIANTS.keys()
 
     try:
@@ -94,20 +93,31 @@ def port_resnet_weights(variant: str) -> ResNet:
 def convert_model_to_channels_last():
     return None
 
+def convert_model_to_channels_last(model: ResNet) -> ResNet:
+    """Converts the model to channels last memory format.
+    
+    References:
+        [1] https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html#converting-existing-models
+    """
+    model = model.to(memory_format=torch.channels_last)
+    return model
+
 
 def convert_inputs_to_channels_last():
     return None
 
 
-def convert_model_to_contiguous():
-    return None
+def convert_model_to_contiguous(model: ResNet) -> ResNet:
+    """Converts the model to contiguous memory format."""
+    model = model.to(memory_format=torch.contiguous_format)
+    return model
 
 
 def warmup_model(model: ResNet, input_size: Tuple[int, int, int], batch_size: int) -> None:
     """Warms up the model before running evaluating the inference time."""
     assert batch_size > 0
     
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = select_device()
 
     model = model.to(device)
     model.eval()
@@ -126,6 +136,11 @@ def count_trainable_parameters(model: ResNet) -> int:
 def count_layers(model: ResNet) -> int:
     """Counts the total number of layers of a net."""
     return len(list(filter(lambda param: param.requires_grad and len(param.data.size()) > 1, model.parameters())))
+
+
+def select_device() -> str:
+    """Selects the device to use, either CPU (default) or CUDA/GPU; assuming just one GPU."""
+    return "cuda" if torch.cuda.is_available() else "cpu"
 
 
 # if __name__ == "__main__":
