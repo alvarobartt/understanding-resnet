@@ -18,7 +18,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
@@ -36,15 +36,14 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     model.to(device)
     
     # Count the total number of trainable parameters
-    trainable_parameters = count_trainable_parameters()
+    trainable_parameters = count_trainable_parameters(model=model)
     print(f"# of Trainable Parameters: {trainable_parameters}")
 
     # Count the total number of layers
-    total_layers = count_layers()
+    total_layers = count_layers(model=model)
     print(f"# of Layers: {total_layers}")
 
     # Initialize/Define train transformation
-    # TODO(alvarobartt): train/val split to train just with 45k random images
     train_transform = T.Compose([
         T.RandomHorizontalFlip(),
         T.RandomCrop(size=(32, 32), padding=4),
@@ -63,6 +62,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
 
     # Load CIFAR10 train dataset (transform it too), and initialize dataloader
     train_dataset = CIFAR10(root="data", train=True, download=True, transform=train_transform)
+    train_dataset, _ = random_split(train_dataset, [45000, 5000], generator=torch.Generator().manual_seed(42))
     train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
     # Load CIFAR10 test dataset (transform it too), and initialize dataloader
@@ -93,6 +93,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     config.batch_size = BATCH_SIZE
     config.architecture = model_name
     config.dataset = 'cifar10'
+    config.dataset_train_size = len(train_dataset)
+    config.dataset_test_size = len(test_dataset)
     config.transformations = True
     config.input_shape = '[32,32,3]'
     config.criterion = 'cross_entropy_loss'
