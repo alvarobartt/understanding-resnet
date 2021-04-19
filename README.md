@@ -23,8 +23,8 @@ ported weights for the bigger ResNets trained with ImageNet.
 * [X] Re-train ResNet20 and train ResNet34 for the first time, then update .pth
 * [X] Check whether the expansion parameter is needed (probably just for Bottleneck)
 * [X] Once implemented and understood, include some explanation on the Bottleneck blocks
-* [ ] Split data 45k/5k before training!
-* [ ] Improve training in train.py
+* [X] Split data 45k/5k before training!
+* [X] Improve training in train.py
 * [X] Move all the utilities to utils.py
 * [ ] Use [torchtyping](https://github.com/patrick-kidger/torchtyping) for more typing details
 * [ ] Include the explanation on the implementation, training and usage of resnet-pytorch

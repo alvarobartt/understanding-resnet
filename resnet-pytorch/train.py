@@ -62,6 +62,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
 
     # Load CIFAR10 train dataset (transform it too), and initialize dataloader
     train_dataset = CIFAR10(root="data", train=True, download=True, transform=train_transform)
+    # TODO(alvarobartt): random split or use a sampler to keep the samples per class ratio?
     train_dataset, _ = random_split(train_dataset, [45000, 5000], generator=torch.Generator().manual_seed(42))
     train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
