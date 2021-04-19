@@ -103,9 +103,10 @@ class ResNet(nn.Module):
         self.rl2 = self._make_layer(block=block, num_blocks=blocks[1], planes=filters[1], stride=2)
         self.rl3 = self._make_layer(block=block, num_blocks=blocks[2], planes=filters[2], stride=2)
         if len(blocks) == 4: self.rl4 = self._make_layer(block=block, num_blocks=blocks[3], planes=filters[3], stride=2)
-        
+
+        self.in_features = filters[-1] * block.expansion
         self.avgpool = nn.AdaptiveAvgPool2d(output_size=1)
-        self.fc = nn.Linear(filters[-1] * block.expansion, num_classes)
+        self.fc = nn.Linear(in_features=self.in_features, out_features=num_classes)
 
         self.apply(self._init_weights)
 
@@ -118,7 +119,7 @@ class ResNet(nn.Module):
         if hasattr(self, 'rl4'): x = self.rl4(x)
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        x = self.fc(x) # Removed softmax: https://discuss.pytorch.org/t/resnet-last-layer-modification/33530/2
+        x = self.fc(x)
         return x
 
     def _make_layer(self, block: Type[Union[BasicBlock, BottleneckBlock]], num_blocks: int, planes: int, stride: int) -> nn.Sequential:
@@ -137,7 +138,11 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def _init_weights(self, m):
-        if isinstance(m, nn.Conv2d): init.kaiming_uniform_(m.weight, mode='fan_out', nonlinearity='relu')
+        if isinstance(m, nn.Conv2d):
+            init.kaiming_uniform_(m.weight, mode='fan_out', nonlinearity='relu')
+        elif isinstance(m, nn.BatchNorm2d):
+            init.constant_(m.weight, 1.)
+            init.constant_(m.bias, 0.)
  
 
 def resnet20(pretrained=False) -> ResNet:
