@@ -1,0 +1,38 @@
+name: test-cpu
+
+on:
+  push:
+    paths:
+      - resnet-pytorch/**
+      - tests/**
+
+jobs:
+  test-cpu-run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.6, 3.7, 3.8]
+        torch-version: [1.8.0]
+        torchvision-version: [0.9.0]
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup conda dependencies
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      shell: bash -l {0}
+      run: |
+        conda install pytorch==${{ matrix.torch-version }} torchvision==${{ matrix.torchvision-version }} cpuonly -c pytorch
+        pip install -r resnet-pytorch/requirements.txt
+        pip install -r tests/requirements.txt
+    
+    - name: Run tests
+      shell: bash -l {0}
+      run: pytest
