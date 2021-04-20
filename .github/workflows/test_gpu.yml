@@ -3,6 +3,7 @@ name: test-gpu
 on:
   push:
     paths:
+      - .github/workflows/**
       - resnet-pytorch/**
       - tests/**
 
