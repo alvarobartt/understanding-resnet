@@ -23,6 +23,8 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
 
+from timm.utils.metrics import AverageMeter, accuracy
+
 from resnet import ResNet, resnet20, resnet32
 from utils import select_device, count_trainable_parameters, count_layers
 from utils import MEAN_NORMALIZATION, STD_NORMALIZATION
@@ -102,35 +104,41 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     config.learning_rate = 1e-1
     config.learning_rate_milestones = LR_MILESTONES
 
-    # Initialize variables before training
-    best_error = None
+    # Initialize AverageMeters before training
+    train_losses = AverageMeter()
+    train_top1 = AverageMeter()
+    test_losses = AverageMeter()
+    test_top1 = AverageMeter()
+
+    # Define best TOP-1 accuracy
+    best_top1 = 0.
 
     # Training loop with wandb logging
     wandb.watch(model)
     for epoch in range(1, EPOCHS+1):
-        running_loss, running_corrects = .0, .0
-        
         model.train()
         start_time = time()
 
         for inputs, labels in train_dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
 
-            optimizer.zero_grad()
-
             outputs = model(inputs)
-            _, preds = torch.max(outputs, 1)
             loss = criterion(outputs, labels)
 
+            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-            running_loss += (loss.item() * inputs.size(0))
-            running_corrects += torch.sum(preds == labels)
+            outputs = outputs.float()
+            loss = loss.float()
+
+            top1 = accuracy(outputs.data, labels)[0]
+            train_losses.update(loss.item(), inputs.size(0))
+            train_top1.update(top1.item(), inputs.size(0))
         
-        train_loss = running_loss / len(train_dataset)
-        train_acc = running_corrects.float() / len(train_dataset)
-        train_error = 1.0 - train_acc
+        train_loss = train_losses.avg
+        train_acc = train_top1.avg
+        train_error = 1.0 - train_top1.avg
         train_time = time() - start_time
 
         wandb.log({
@@ -144,21 +152,22 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
         start_time = time()
 
         with torch.no_grad():
-            running_loss, running_corrects = .0, .0
-
             for inputs, labels in test_dataloader:
                 inputs, labels = inputs.to(device), labels.to(device)
 
                 outputs = model(inputs)
-                _, preds = torch.max(outputs, 1)
                 loss = criterion(outputs, labels)
 
-                running_loss += (loss.item() * inputs.size(0))
-                running_corrects += torch.sum(preds == labels)
+                outputs = outputs.float()
+                loss = loss.float()
+
+                top1 = accuracy(outputs.data, labels)[0]
+                test_losses.update(loss.item(), inputs.size(0))
+                test_top1.update(top1.item(), inputs.size(0))
             
-            test_loss = running_loss / len(test_dataset)
-            test_acc = running_corrects.float() / len(test_dataset)
-            test_error = 1.0 - test_acc
+            test_loss = test_losses.avg
+            test_acc = test_top1.avg
+            test_error = 1.0 - test_top1.avg
             test_time = time() - start_time
             
             wandb.log({
@@ -166,10 +175,10 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
                 'test_error': test_error, 'test_time': test_time
             }, step=epoch)
 
-        if best_error is None: best_error = test_error
-        if best_error >= test_error:
+        if best_top1 is None: best_top1 = test_acc
+        if best_top1 <= test_acc:
             torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{model_name}-cifar10.pth"))
-            best_error = test_error
+            best_top1 = test_acc
 
     # Finish logging this wandb run
     # https://docs.wandb.ai/library/init#how-do-i-launch-multiple-runs-from-one-script
