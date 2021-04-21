@@ -1,7 +1,8 @@
 """ResNet PyTorch Utils
 
 Contains some functions that are useful towards the implementation
-and/or usage of all the available ResNet v1 variants.
+and/or usage of all the available ResNet v1 variants trained both on
+ImageNet and CIFAR10.
 
 Some of this functions include:
 - Porting the weights from timm
@@ -20,9 +21,11 @@ import torch
 from torch import Tensor
 from torch.hub import load_state_dict_from_url
 
-from resnet import ResNet, resnet18, resnet34, resnet50, resnet101, resnet152
+from resnet import ResNet
+from resnet import resnet18, resnet34, resnet50, resnet101, resnet152
+from resnet import resnet20, resnet32, resnet44, resnet56
 
-VARIANTS = {
+IMAGENET_VARIANTS = {
     "resnet18": {
         "url": "https://download.pytorch.org/models/resnet18-5c106cde.pth",
         "model": resnet18
@@ -45,13 +48,32 @@ VARIANTS = {
     }
 }
 
+CIFAR10_VARIANTS = {
+    "resnet20": {
+        "url": "",
+        "model": resnet20
+    },
+    "resnet32": {
+        "url": "",
+        "model": resnet32
+    },
+    "resnet44": {
+        "url": "",
+        "model": resnet44
+    },
+    "resnet56": {
+        "url": "",
+        "model": resnet56
+    }
+}
+
 # https://gist.github.com/weiaicunzai/e623931921efefd4c331622c344d8151#gistcomment-2851662
 MEAN_NORMALIZATION = (0.4914, 0.4822, 0.4465)
 STD_NORMALIZATION = (0.247, 0.2435, 0.2616)
 
 
 def port_resnet_weights(variant: str) -> ResNet:
-    """Ports the pre-trained weights for any ResNet v1 model from timm and/or PyTorch.
+    """Ports the pre-trained weights for any ResNet v1 model trained on ImageNet from timm and/or PyTorch.
 
     Example:
         >>> from utils import port_resnet_weights
@@ -63,10 +85,10 @@ def port_resnet_weights(variant: str) -> ResNet:
         [1] PyTorch image models, scripts, pretrained weights https://github.com/rwightman/pytorch-image-models
         [2] torchvision: Datasets, Transforms and Models specific to Computer Vision https://github.com/pytorch/vision 
     """
-    assert variant in VARIANTS.keys()
+    assert variant in IMAGENET_VARIANTS.keys()
 
     try:
-        url = VARIANTS[variant]['url']
+        url = IMAGENET_VARIANTS[variant]['url']
         original_state_dict = load_state_dict_from_url(url)
     except Exception as e:
         raise Exception(f"state_dict could not be loaded from URL with exception: {e}")
@@ -82,7 +104,7 @@ def port_resnet_weights(variant: str) -> ResNet:
     del original_state_dict
 
     try:
-        model = VARIANTS[variant]['model']
+        model = IMAGENET_VARIANTS[variant]['model']
         model = model(pretrained=False)
         model.load_state_dict(custom_state_dict)
     except Exception as e:

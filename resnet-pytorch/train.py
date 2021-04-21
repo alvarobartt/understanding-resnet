@@ -62,11 +62,11 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
 
     # Load CIFAR10 train dataset (transform it too), and initialize dataloader
     train_dataset = CIFAR10(root="data", train=True, download=True, transform=train_transform)
-    train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, pin_memory=True)
 
     # Load CIFAR10 test dataset (transform it too), and initialize dataloader
     test_dataset = CIFAR10(root="data", train=False, download=True, transform=test_transform)
-    test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
+    test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False, pin_memory=True)
 
     # Define training parameters as described in the original paper
     ITERATIONS = 64000
@@ -95,11 +95,12 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     config.dataset_train_size = len(train_dataset)
     config.dataset_test_size = len(test_dataset)
     config.transformations = True
-    config.input_shape = '[32,32,3]'
+    config.input_shape = '[32,32]'
+    config.channels_last = False
     config.criterion = 'cross_entropy_loss'
     config.optimizer = 'sgd'
     config.learning_rate = 1e-1
-    config.channels_last = False
+    config.learning_rate_milestones = LR_MILESTONES
 
     # Initialize variables before training
     best_error = None
@@ -128,7 +129,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
             running_corrects += torch.sum(preds == labels)
         
         train_loss = running_loss / len(train_dataset)
-        train_acc = running_corrects.double() / len(train_dataset)
+        train_acc = running_corrects.float() / len(train_dataset)
         train_error = 1.0 - train_acc
         train_time = time() - start_time
 
@@ -156,7 +157,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
                 running_corrects += torch.sum(preds == labels)
             
             test_loss = running_loss / len(test_dataset)
-            test_acc = running_corrects.double() / len(test_dataset)
+            test_acc = running_corrects.float() / len(test_dataset)
             test_error = 1.0 - test_acc
             test_time = time() - start_time
             
@@ -176,5 +177,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
 
 
 if __name__ == '__main__':
+    # https://discuss.pytorch.org/t/what-does-torch-backends-cudnn-benchmark-do/5936
+    # https://pytorch.org/docs/stable/backends.html
+    if torch.backends.cudnn.is_available(): torch.backends.cudnn.benchmark = True
+
     train_resnet_cifar10(model=resnet20(), model_name='resnet20')
-    train_resnet_cifar10(model=resnet32(), model_name='resnet32')

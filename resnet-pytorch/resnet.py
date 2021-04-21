@@ -97,8 +97,7 @@ class ResNet(nn.Module):
         self.bn1 = nn.BatchNorm2d(num_features=filters[0])
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        
-        # RL stands for Residual Layer
+
         self.rl1 = self._make_layer(block=block, num_blocks=blocks[0], planes=filters[0], stride=1)
         self.rl2 = self._make_layer(block=block, num_blocks=blocks[1], planes=filters[1], stride=2)
         self.rl3 = self._make_layer(block=block, num_blocks=blocks[2], planes=filters[2], stride=2)
@@ -138,8 +137,8 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def _init_weights(self, m):
-        if isinstance(m, nn.Conv2d):
-            init.kaiming_uniform_(m.weight, mode='fan_out', nonlinearity='relu')
+        if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
+            init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
         elif isinstance(m, nn.BatchNorm2d):
             init.constant_(m.weight, 1.)
             init.constant_(m.bias, 0.)
