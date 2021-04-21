@@ -2,6 +2,7 @@
 --find-links=https://download.pytorch.org/whl/torch_stable.html
 torch==1.7.1+cu101
 torchvision==0.8.2+cu101
+timm
 # JAX
 --find-links=https://storage.googleapis.com/jax-releases/jax_releases.html
 jax

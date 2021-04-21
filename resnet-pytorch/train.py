@@ -137,8 +137,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
             train_top1.update(top1.item(), inputs.size(0))
         
         train_loss = train_losses.avg
-        train_acc = train_top1.avg
-        train_error = 1.0 - train_top1.avg
+        train_acc = train_top1.avg / 100
+        train_error = 1.0 - train_acc
         train_time = time() - start_time
 
         wandb.log({
@@ -166,8 +166,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
                 test_top1.update(top1.item(), inputs.size(0))
             
             test_loss = test_losses.avg
-            test_acc = test_top1.avg
-            test_error = 1.0 - test_top1.avg
+            test_acc = test_top1.avg / 100
+            test_error = 1.0 - test_acc
             test_time = time() - start_time
             
             wandb.log({
