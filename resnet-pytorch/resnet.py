@@ -104,7 +104,7 @@ class ResNet(nn.Module):
         if len(blocks) == 4: self.rl4 = self._make_layer(block=block, num_blocks=blocks[3], planes=filters[3], stride=2)
 
         self.in_features = filters[-1] * block.expansion
-        self.avgpool = nn.AdaptiveAvgPool2d(output_size=1)
+        # self.avgpool = nn.AdaptiveAvgPool2d(output_size=1)
         self.fc = nn.Linear(in_features=self.in_features, out_features=num_classes)
 
         # https://discuss.pytorch.org/t/how-are-layer-weights-and-biases-initialized-by-default/13073/4
@@ -117,8 +117,10 @@ class ResNet(nn.Module):
         x = self.rl2(x)
         x = self.rl3(x)
         if hasattr(self, 'rl4'): x = self.rl4(x)
-        x = self.avgpool(x)
-        x = torch.flatten(x, 1)
+        # x = self.avgpool(x)
+        # x = torch.flatten(x, 1)
+        x = F.avg_pool2d(x, x.size()[3])
+        x = x.view(x.size(0), -1)
         x = self.fc(x)
         return x
 
