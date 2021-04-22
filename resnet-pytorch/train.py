@@ -8,6 +8,8 @@ from __future__ import absolute_import
 
 import os
 
+import json
+
 from time import time
 
 from math import ceil
@@ -186,6 +188,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
         if best_prec1 is None: best_prec1 = test_acc
         if best_prec1 <= test_acc:
             torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{model_name}-cifar10.pth"))
+            with open(os.path.join(wandb.run.dir, f"{model_name}-cifar10.json"), "w") as f:
+                json.dump({"epoch": epoch, "train_prec1": train_acc, "test_prec1": test_acc}, f)
             best_prec1 = test_acc
 
     # Finish logging this wandb run
