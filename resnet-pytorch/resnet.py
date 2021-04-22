@@ -96,7 +96,7 @@ class ResNet(nn.Module):
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=filters[0], kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
         self.bn1 = nn.BatchNorm2d(num_features=filters[0])
 
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        if len(blocks) == 4: self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         self.rl1 = self._make_layer(block=block, num_blocks=blocks[0], planes=filters[0], stride=1)
         self.rl2 = self._make_layer(block=block, num_blocks=blocks[1], planes=filters[1], stride=2)
@@ -107,11 +107,12 @@ class ResNet(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d(output_size=1)
         self.fc = nn.Linear(in_features=self.in_features, out_features=num_classes)
 
-        self.apply(self._init_weights)
+        # https://discuss.pytorch.org/t/how-are-layer-weights-and-biases-initialized-by-default/13073/4
+        self.apply(weights_init)
 
     def forward(self, x: Tensor) -> Tensor:
         x = F.relu(self.bn1(self.conv1(x)))
-        x = self.maxpool(x)
+        if hasattr(self, 'maxpool'): x = self.maxpool(x)
         x = self.rl1(x)
         x = self.rl2(x)
         x = self.rl3(x)
@@ -136,12 +137,13 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def _init_weights(self, m):
-        if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
-            init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-        elif isinstance(m, nn.BatchNorm2d):
-            init.constant_(m.weight, 1.)
-            init.constant_(m.bias, 0.)
+
+def weights_init(m):
+    if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
+        init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+    elif isinstance(m, nn.BatchNorm2d):
+        init.constant_(m.weight, 1.)
+        init.constant_(m.bias, 0.)
  
 
 def resnet20(pretrained=False) -> ResNet:
