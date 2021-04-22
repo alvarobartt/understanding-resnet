@@ -26,13 +26,16 @@ ported weights for the bigger ResNets trained with ImageNet.
 * [X] Split data 45k/5k before training!
 * [X] Improve training in train.py
 * [X] Move all the utilities to utils.py
-* [ ] Implement https://github.com/akamaster/pytorch_resnet_cifar10/blob/master/resnet.py to check performance with CIFAR10 as described in the original paper
+* [X] Implement https://github.com/akamaster/pytorch_resnet_cifar10/blob/master/resnet.py to check performance with CIFAR10 as described in the original paper
 * [X] Define the tests in GitHub Actions (look for useful resources to do so in a nice way)
 * [ ] Split CPU/GPU tests in GitHub Actions not in pytest
 * [X] Use [kornia/tests](https://github.com/kornia/kornia/tree/master/test) as a testing guide
 * [ ] Create a self-hosted runner for GPU runs at https://github.com/alvarobartt/understanding-resnet/settings/actions
 * [ ] Limit runs on CPU/GPU just to master so as not to let any user use my own GPU for overload issues
+* [ ] Implement the downsample/subsample method for CIFAR10 as described in the original paper
 * [ ] Use [torchtyping](https://github.com/patrick-kidger/torchtyping) for more typing details
+* [ ] Use [hydra](https://github.com/facebookresearch/hydra) to setup the configuration
+* [ ] Use [click](https://github.com/pallets/click) as the CLI to train and evaluate (the pretrained) models
 * [ ] Include the explanation on the implementation, training and usage of resnet-pytorch
 * [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
 * [ ] Implement ResNets using JAX

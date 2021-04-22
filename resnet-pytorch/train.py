@@ -27,7 +27,7 @@ from torchvision.datasets import CIFAR10
 
 from timm.utils.metrics import AverageMeter, accuracy
 
-from resnet import ResNet, resnet20
+from resnet import ResNet, resnet32
 from utils import select_device, count_trainable_parameters, count_layers
 from utils import MEAN_NORMALIZATION, STD_NORMALIZATION
 
@@ -198,4 +198,4 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
 
 
 if __name__ == '__main__':
-    train_resnet_cifar10(model=resnet20(), model_name='resnet20')
+    train_resnet_cifar10(model=resnet32(), model_name='resnet32')

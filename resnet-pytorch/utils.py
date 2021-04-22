@@ -51,19 +51,19 @@ IMAGENET_VARIANTS = {
 
 CIFAR10_VARIANTS = {
     "resnet20": {
-        "url": "",
+        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet20-cifar10.pth",
         "model": resnet20
     },
     "resnet32": {
-        "url": "",
+        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32-cifar10.pth",
         "model": resnet32
     },
     "resnet44": {
-        "url": "",
+        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet44-cifar10.pth",
         "model": resnet44
     },
     "resnet56": {
-        "url": "",
+        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet56-cifar10.pth",
         "model": resnet56
     }
 }
