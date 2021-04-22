@@ -17,6 +17,7 @@ from typing import Tuple
 from collections import OrderedDict
 
 import torch
+import torch.nn as nn
 
 from torch import Tensor
 from torch.hub import load_state_dict_from_url
@@ -113,7 +114,7 @@ def port_resnet_weights(variant: str) -> ResNet:
     return model
 
 
-def convert_model_to_channels_last(model: ResNet) -> ResNet:
+def convert_model_to_channels_last(model: nn.Module) -> nn.Module:
     """Converts the model to channels last memory format.
     
     References:
@@ -129,13 +130,13 @@ def convert_inputs_to_channels_last(inputs: Tensor) -> Tensor:
     return inputs
 
 
-def convert_model_to_contiguous(model: ResNet) -> ResNet:
+def convert_model_to_contiguous(model: nn.Module) -> nn.Module:
     """Converts the model to contiguous memory format."""
     model = model.to(memory_format=torch.contiguous_format)
     return model
 
 
-def warmup_model(model: ResNet, input_size: Tuple[int, int, int], batch_size: int, channels_last: bool = False) -> None:
+def warmup_model(model: nn.Module, input_size: Tuple[int, int, int], batch_size: int, channels_last: bool = False) -> None:
     """Warms up the model before running evaluating the inference time."""
     assert batch_size > 0
     
@@ -152,12 +153,12 @@ def warmup_model(model: ResNet, input_size: Tuple[int, int, int], batch_size: in
     with torch.no_grad(): _ = model(inputs)
 
 
-def count_trainable_parameters(model: ResNet) -> int:
+def count_trainable_parameters(model: nn.Module) -> int:
     """Counts the total number of trainable parameters of a net."""
     return sum(param.numel() for param in model.parameters() if param.requires_grad)
 
 
-def count_layers(model: ResNet) -> int:
+def count_layers(model: nn.Module) -> int:
     """Counts the total number of layers of a net."""
     return len(list(filter(lambda param: param.requires_grad and len(param.data.size()) > 1, model.parameters())))
 
