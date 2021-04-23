@@ -4,7 +4,7 @@ He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
 """
 
-from typing import List, Tuple, Type, Union
+from typing import List, Tuple, Type, Union, Optional
 
 import torch
 import torch.nn as nn
@@ -20,6 +20,7 @@ __all__ = ['BasicBlock', 'BottleneckBlock', 'ResNet']
 
 
 class IdentityMappingZero(nn.Module):
+    # TODO(alvarobartt): currently assuming channels_last=False
     def __init__(self, out_channels: int, stride: int) -> None:
         super(IdentityMappingZero, self).__init__()
         self.out_channels = out_channels
@@ -28,13 +29,14 @@ class IdentityMappingZero(nn.Module):
         self.zeropad = nn.ZeroPad2d(padding=(0, 0, 0, 0, out_channels//4, out_channels//4))
 
     def forward(self, x):
-        x = x[:, :, ::self.stride, ::self.stride]
-        x = self.zeropad(x)
+        x = x[:, :, ::self.stride, ::self.stride] # STRIDE = 2 for the HxW (divide by 2)
+        x = self.zeropad(x) # ZERO PADDING for the channels (multiply by 2)
         return x
 
 
 class BasicBlock(nn.Module):
     expansion: int = 1
+    zero_padding: bool = False
 
     def __init__(self, in_channels: int, out_channels: int, stride: int) -> None:
         super(BasicBlock, self).__init__()
@@ -48,13 +50,14 @@ class BasicBlock(nn.Module):
         self.subsample = nn.Sequential()
 
         if stride != 1 or in_channels != out_channels * self.expansion:
-            # "The subsampling is performed by convolutions with a stride of 2"
-            # self.subsample = nn.Sequential(
-            #     nn.Conv2d(in_channels=in_channels, out_channels=out_channels * self.expansion, kernel_size=1, stride=stride, bias=False),
-            #     nn.BatchNorm2d(num_features=out_channels * self.expansion)
-            # )
-
-            self.subsample = IdentityMappingZero(out_channels=out_channels * self.expansion, stride=stride)
+            if self.zero_padding:
+                self.subsample = IdentityMappingZero(out_channels=out_channels * self.expansion, stride=stride)
+            else:
+                "The subsampling is performed by convolutions with a stride of 2"
+                self.subsample = nn.Sequential(
+                    nn.Conv2d(in_channels=in_channels, out_channels=out_channels * self.expansion, kernel_size=1, stride=stride, bias=False),
+                    nn.BatchNorm2d(num_features=out_channels * self.expansion)
+                )
 
     def forward(self, x: Tensor) -> Tensor:
         x_ = F.relu(self.bn1(self.conv1(x)))
@@ -97,11 +100,14 @@ class BottleneckBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block: Type[Union[BasicBlock, BottleneckBlock]], blocks: List[int], filters: List[int], num_classes: int) -> None:
+    def __init__(self, block: Type[Union[BasicBlock, BottleneckBlock]], blocks: List[int], filters: List[int], num_classes: int, zero_padding: Optional[bool] = False) -> None:
         super(ResNet, self).__init__()
 
         assert len(blocks) == 3 or len(blocks) == 4, "ResNet can either have `3` blocks for CIFAR10, or `4` for ImageNet"
         assert len(blocks) == len(filters), "# of blocks must match # of filters"
+        if zero_padding: assert block == BasicBlock, f"Identity Mapping with Zero Padding just available for BasicBlocks {type(block)}"
+
+        block.zero_padding = zero_padding
 
         self.in_channels = filters[0]
         
@@ -164,7 +170,7 @@ def weights_init(m):
 
 def resnet20(pretrained=False) -> ResNet:
     """ResNet-20 model for CIFAR10."""
-    model = ResNet(block=BasicBlock, blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10, zero_padding=True)
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet20-cifar10.pth"))
     return model
 
