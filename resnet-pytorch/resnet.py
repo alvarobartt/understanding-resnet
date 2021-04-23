@@ -170,6 +170,13 @@ def resnet56(pretrained=False) -> ResNet:
     if pretrained: raise NotImplementedError
     return model
 
+def resnet110(pretrained=False) -> ResNet:
+    """ResNet-101 model for CIFAR10."""
+    model = ResNet(block=BasicBlock, blocks=[18, 18, 18], filters=[16, 32, 64], num_classes=10)
+    if pretrained: raise NotImplementedError
+    return model
+
+
 def resnet18(pretrained=False) -> ResNet:
     """ResNet-18 model for ImageNet."""
     model = ResNet(block=BasicBlock, blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
