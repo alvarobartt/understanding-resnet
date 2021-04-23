@@ -19,6 +19,20 @@ from torch.hub import load_state_dict_from_url
 __all__ = ['BasicBlock', 'BottleneckBlock', 'ResNet']
 
 
+class IdentityMappingZero(nn.Module):
+    def __init__(self, out_channels: int, stride: int) -> None:
+        super(IdentityMappingZero, self).__init__()
+        self.out_channels = out_channels
+        self.stride = stride
+
+        self.zeropad = nn.ZeroPad2d(padding=(0, 0, 0, 0, out_channels//4, out_channels//4))
+
+    def forward(self, x):
+        x = x[:, :, ::self.stride, ::self.stride]
+        x = self.zeropad(x)
+        return x
+
+
 class BasicBlock(nn.Module):
     expansion: int = 1
 
@@ -35,10 +49,12 @@ class BasicBlock(nn.Module):
 
         if stride != 1 or in_channels != out_channels * self.expansion:
             # "The subsampling is performed by convolutions with a stride of 2"
-            self.subsample = nn.Sequential(
-                nn.Conv2d(in_channels=in_channels, out_channels=out_channels * self.expansion, kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(num_features=out_channels * self.expansion)
-            )
+            # self.subsample = nn.Sequential(
+            #     nn.Conv2d(in_channels=in_channels, out_channels=out_channels * self.expansion, kernel_size=1, stride=stride, bias=False),
+            #     nn.BatchNorm2d(num_features=out_channels * self.expansion)
+            # )
+
+            self.subsample = IdentityMappingZero(out_channels=out_channels * self.expansion, stride=stride)
 
     def forward(self, x: Tensor) -> Tensor:
         x_ = F.relu(self.bn1(self.conv1(x)))
