@@ -20,17 +20,17 @@ __all__ = ['BasicBlock', 'BottleneckBlock', 'ResNet']
 
 
 class IdentityMappingZero(nn.Module):
-    # TODO(alvarobartt): currently assuming channels_last=False
     def __init__(self, out_channels: int, stride: int) -> None:
         super(IdentityMappingZero, self).__init__()
         self.out_channels = out_channels
         self.stride = stride
 
-        self.zeropad = nn.ZeroPad2d(padding=(0, 0, 0, 0, out_channels//4, out_channels//4))
+        pad_value = self.out_channels//4
+        self.zeropad = nn.ZeroPad2d(padding=(0, 0, 0, 0, pad_value, pad_value))
 
     def forward(self, x):
-        x = x[:, :, ::self.stride, ::self.stride] # STRIDE = 2 for the HxW (divide by 2)
-        x = self.zeropad(x) # ZERO PADDING for the channels (multiply by 2)
+        x = x[:, :, ::self.stride, ::self.stride]
+        x = self.zeropad(x)
         return x
 
 
@@ -105,9 +105,10 @@ class ResNet(nn.Module):
 
         assert len(blocks) == 3 or len(blocks) == 4, "ResNet can either have `3` blocks for CIFAR10, or `4` for ImageNet"
         assert len(blocks) == len(filters), "# of blocks must match # of filters"
-        if zero_padding: assert block == BasicBlock, f"Identity Mapping with Zero Padding just available for BasicBlocks {type(block)}"
-
-        block.zero_padding = zero_padding
+        
+        if zero_padding:
+            assert block == BasicBlock, f"Identity Mapping with Zero Padding just available for BasicBlocks"
+            block.zero_padding = zero_padding
 
         self.in_channels = filters[0]
         

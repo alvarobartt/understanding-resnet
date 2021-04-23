@@ -9,21 +9,14 @@ from resnet import resnet20
 from utils import select_device, count_layers
 
 
-def test_device_is_cpu():
-    global device
-    device = select_device()
-    assert 'cpu' == device
-
-
 def test_resnet20():
     model = resnet20()
-    model = model.to(device)
-    print(model)
+    model.to(memory_format=torch.channels_last)
     print(count_layers(model))
     assert False == next(model.parameters()).is_cuda
 
     inputs = torch.randn((1, 3, 32, 32))
-    inputs = inputs.to(device)
+    inputs = inputs.contiguous(memory_format=torch.channels_last)
     assert False == inputs.is_cuda
 
     with torch.no_grad():
