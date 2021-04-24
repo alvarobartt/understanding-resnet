@@ -27,12 +27,12 @@ from torchvision.datasets import CIFAR10
 
 from timm.utils.metrics import AverageMeter, accuracy
 
-from resnet import ResNet, resnet32
+from resnet import ResNet, resnet20
 from utils import select_device, count_trainable_parameters, count_layers
 from utils import MEAN_NORMALIZATION, STD_NORMALIZATION
 
 
-def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
+def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> None:
     # Check that GPU support is available
     device = torch.device(select_device())
 
@@ -103,6 +103,9 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
     config.batches_train = len(train_dataloader)
     config.batches_test = len(test_dataloader)
     config.architecture = model_name
+    config.layers = total_layers
+    config.parameters = trainable_parameters
+    config.option = model_option
     config.dataset = 'cifar10'
     config.dataset_train_size = len(train_dataset)
     config.dataset_test_size = len(test_dataset)
@@ -198,4 +201,5 @@ def train_resnet_cifar10(model: ResNet, model_name: str) -> None:
 
 
 if __name__ == '__main__':
-    train_resnet_cifar10(model=resnet32(), model_name='resnet32')
+    model = resnet20(zero_padding=True, pretrained=False)
+    train_resnet_cifar10(model=model, model_name='resnet20', model_option='a')

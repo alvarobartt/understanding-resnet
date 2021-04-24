@@ -169,10 +169,13 @@ def weights_init(m):
         init.constant_(m.bias, 0.)
  
 
-def resnet20(pretrained=False) -> ResNet:
+def resnet20(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
     """ResNet-20 model for CIFAR10."""
-    model = ResNet(block=BasicBlock, blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10, zero_padding=True)
-    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet20-cifar10.pth"))
+    model = ResNet(block=BasicBlock, blocks=[3, 3, 3], filters=[16, 32, 64], num_classes=10, zero_padding=zero_padding)
+    if pretrained:
+        url = "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet20a-cifar10.pth" \
+            if zero_padding else "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet20b-cifar10.pth"
+        model.load_state_dict(load_state_dict_from_url(url))
     return model
 
 def resnet32(pretrained=False) -> ResNet:
@@ -198,7 +201,6 @@ def resnet110(pretrained=False) -> ResNet:
     model = ResNet(block=BasicBlock, blocks=[18, 18, 18], filters=[16, 32, 64], num_classes=10)
     if pretrained: raise NotImplementedError
     return model
-
 
 def resnet18(pretrained=False) -> ResNet:
     """ResNet-18 model for ImageNet."""
