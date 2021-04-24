@@ -181,7 +181,10 @@ def resnet20(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
 def resnet32(pretrained=False) -> ResNet:
     """ResNet-32 model for CIFAR10."""
     model = ResNet(block=BasicBlock, blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
-    if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32-cifar10.pth"))
+    if pretrained:
+        url = "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32a-cifar10.pth" \
+            if zero_padding else "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32b-cifar10.pth"
+        model.load_state_dict(load_state_dict_from_url(url))
     return model
 
 def resnet44(pretrained=False) -> ResNet:
