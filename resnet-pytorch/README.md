@@ -1,4 +1,10 @@
-## :test_tube: ResNets for CIFAR10 Implementation
+# :alembic: Implementation
+
+bla bla bla
+
+---
+
+## :test_tube: ResNets for CIFAR10
 
 In order to understand how does the ResNet architecture works, we will be implementing the simplest version of it, which
 is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
@@ -49,3 +55,29 @@ few convolutional layers, which means more parameters than its plain counterpart
 
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
 that stands for the 10 classes of the CIFAR10 dataset.
+
+## :mechanical_arm: Training
+
+```bash
+python resnet-pytorch/train.py
+```
+
+---
+
+## :test_tube: ResNets for ImageNet
+
+bla bla bla
+
+### :open_file_folder: Dataset
+
+bla bla bla
+
+### :brain: Architecture
+
+bla bla bla
+
+## :mechanical_arm: Training
+
+```bash
+python resnet-pytorch/train.py
+```
