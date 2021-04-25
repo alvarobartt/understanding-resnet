@@ -24,7 +24,6 @@ from torch.hub import load_state_dict_from_url
 
 from resnet import ResNet
 from resnet import resnet18, resnet34, resnet50, resnet101, resnet152
-from resnet import resnet20, resnet32, resnet44, resnet56
 
 IMAGENET_VARIANTS = {
     "resnet18": {
@@ -46,25 +45,6 @@ IMAGENET_VARIANTS = {
     "resnet152": {
         "url": "https://download.pytorch.org/models/resnet152-394f9c45.pth",
         "model": resnet152
-    }
-}
-
-CIFAR10_VARIANTS = {
-    "resnet20": {
-        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet20-cifar10.pth",
-        "model": resnet20
-    },
-    "resnet32": {
-        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32-cifar10.pth",
-        "model": resnet32
-    },
-    "resnet44": {
-        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet44-cifar10.pth",
-        "model": resnet44
-    },
-    "resnet56": {
-        "url": "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet56-cifar10.pth",
-        "model": resnet56
     }
 }
 

@@ -27,13 +27,13 @@ from torchvision.datasets import CIFAR10
 
 from timm.utils.metrics import AverageMeter, accuracy
 
-from resnet import ResNet, resnet20, resnet32
+from resnet import ResNet
 from utils import select_device, count_trainable_parameters, count_layers
 from utils import MEAN_NORMALIZATION, STD_NORMALIZATION
 
 
 def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> None:
-    # Check that GPU support is available
+    # Check whether GPU support is available or not
     device = torch.device(select_device())
 
     # Initiliaze ResNet for CIFAR10 and move it to the GPU (CPU if not available)
@@ -190,18 +190,11 @@ def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> N
 
         if best_prec1 is None: best_prec1 = test_acc
         if best_prec1 <= test_acc:
-            torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{model_name}-cifar10.pth"))
-            with open(os.path.join(wandb.run.dir, f"{model_name}-cifar10.json"), "w") as f:
+            torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{model_name}{model_option}-cifar10.pth"))
+            with open(os.path.join(wandb.run.dir, f"{model_name}{model_option}-cifar10.json"), "w") as f:
                 json.dump({"epoch": epoch, "train_prec1": train_acc, "test_prec1": test_acc}, f)
             best_prec1 = test_acc
 
     # Finish logging this wandb run
     # https://docs.wandb.ai/library/init#how-do-i-launch-multiple-runs-from-one-script
     run.finish()
-
-
-if __name__ == '__main__':
-    # model = resnet20(zero_padding=True, pretrained=False)
-    # train_resnet_cifar10(model=model, model_name='resnet20', model_option='a')
-    model = resnet32(zero_padding=True, pretrained=False)
-    train_resnet_cifar10(model=model, model_name='resnet32', model_option='a')

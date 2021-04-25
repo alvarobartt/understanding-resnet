@@ -1,4 +1,4 @@
-## :test_tube: ResNet-20 Implementation
+## :test_tube: ResNets for CIFAR10 Implementation
 
 In order to understand how does the ResNet architecture works, we will be implementing the simplest version of it, which
 is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
@@ -16,14 +16,15 @@ original image or from its horizontal flip; just for the training data.
 
 ### :brain: Architecture
 
-* The architecture is summarized in the following table, where `n=3` leading to a neural network with 20 weighted layers.
+* The architecture is summarized in the following table, where `n=3` (ResNet20), `n=5` (ResNet32), `n=7` (ResNet44), `n=9` (ResNet56), and `n=18` (ResNet110).
 
   | output map size | 32 x 32 | 16 x 16 | 8 x 8 |
   |-----------------|---------|---------|-------|
   | # layers        | 1 + 2n  | 2n      | 2n    |
   | # filters       | 16      | 32      | 64    |
   
-* Both, the plain neural network and the residual neural network, have the exact same architecture.
+* Both, the plain neural network and the residual neural network, have the exact same architecture, besides
+the identity shortcut in the second one; but the same amount of trainable parameters and layers.
 
 * The convolutional filters to be applied are 16, 32, and 64; so that the size of the input image goes 
 from 32x32 to 16x16, and then to 8x8.
@@ -37,6 +38,14 @@ layers with 3x3 convolutions, that contains `2n` layers for each feature map siz
 * The subsampling/downsampling is performed by convolutions with a stride of 2, instead of using pooling operations. 
 A comparison between both approaches can be found at: 
 [Stackexchange: Pooling vs. stride for downsampling](https://stats.stackexchange.com/questions/387482/pooling-vs-stride-for-downsampling/387522)
+
+* There are 2 known options for the downsampling/subsampling in the basic blocks as described in the paper:
+  * Option A: the shortcut performs identity mapping with extra zero entries padded, to increase the dimensions.
+  * Option B: the projection shortcut applies 1x1 convolutions to match the dimensions.
+
+* The main difference between both options is that the option A does not include extra parameters, which
+is nice in order to compare the residual networks versus their plain counterpart. And, the option B includes a
+few convolutional layers, which means more parameters than its plain counterpart.
 
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
 that stands for the 10 classes of the CIFAR10 dataset.
