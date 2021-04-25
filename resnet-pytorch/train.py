@@ -201,7 +201,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> N
 
 
 if __name__ == '__main__':
-    model = resnet20(zero_padding=True, pretrained=False)
-    train_resnet_cifar10(model=model, model_name='resnet20', model_option='a')
+    # model = resnet20(zero_padding=True, pretrained=False)
+    # train_resnet_cifar10(model=model, model_name='resnet20', model_option='a')
     model = resnet32(zero_padding=True, pretrained=False)
     train_resnet_cifar10(model=model, model_name='resnet32', model_option='a')

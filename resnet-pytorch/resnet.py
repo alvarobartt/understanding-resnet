@@ -178,58 +178,58 @@ def resnet20(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
         model.load_state_dict(load_state_dict_from_url(url))
     return model
 
-def resnet32(pretrained=False) -> ResNet:
+def resnet32(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
     """ResNet-32 model for CIFAR10."""
-    model = ResNet(block=BasicBlock, blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[5, 5, 5], filters=[16, 32, 64], num_classes=10, zero_padding=zero_padding)
     if pretrained:
         url = "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32a-cifar10.pth" \
             if zero_padding else "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-cifar10/resnet32b-cifar10.pth"
         model.load_state_dict(load_state_dict_from_url(url))
     return model
 
-def resnet44(pretrained=False) -> ResNet:
+def resnet44(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
     """ResNet-44 model for CIFAR10."""
-    model = ResNet(block=BasicBlock, blocks=[7, 7, 7], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[7, 7, 7], filters=[16, 32, 64], num_classes=10, zero_padding=zero_padding)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet56(pretrained=False) -> ResNet:
+def resnet56(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
     """ResNet-56 model for CIFAR10."""
-    model = ResNet(block=BasicBlock, blocks=[9, 9, 9], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[9, 9, 9], filters=[16, 32, 64], num_classes=10, zero_padding=zero_padding)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet110(pretrained=False) -> ResNet:
+def resnet110(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
     """ResNet-101 model for CIFAR10."""
-    model = ResNet(block=BasicBlock, blocks=[18, 18, 18], filters=[16, 32, 64], num_classes=10)
+    model = ResNet(block=BasicBlock, blocks=[18, 18, 18], filters=[16, 32, 64], num_classes=10, zero_padding=zero_padding)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet18(pretrained=False) -> ResNet:
+def resnet18(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
     """ResNet-18 model for ImageNet."""
-    model = ResNet(block=BasicBlock, blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000)
+    model = ResNet(block=BasicBlock, blocks=[2, 2, 2, 2], filters=[64, 128, 256, 512], num_classes=1000, zero_padding=zero_padding)
     if pretrained: model.load_state_dict(load_state_dict_from_url("https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-imagenet/resnet18-imagenet-ported.pth"))
     return model
 
-def resnet34(pretrained=False) -> ResNet:
+def resnet34(zero_padding: bool = True, pretrained: bool = False) -> ResNet:
     """ResNet-34 model for ImageNet."""
-    model = ResNet(block=BasicBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
+    model = ResNet(block=BasicBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000, zero_padding=zero_padding)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet50(pretrained=False) -> ResNet:
+def resnet50(pretrained: bool = False) -> ResNet:
     """ResNet-50 model for ImageNet."""
     model = ResNet(block=BottleneckBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet101(pretrained=False) -> ResNet:
+def resnet101(pretrained: bool = False) -> ResNet:
     """ResNet-101 model for ImageNet."""
     model = ResNet(block=BottleneckBlock, blocks=[3, 4, 23, 3], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: raise NotImplementedError
     return model
 
-def resnet152(pretrained=False) -> ResNet:
+def resnet152(pretrained: bool = False) -> ResNet:
     """ResNet-152 model for ImageNet."""
     model = ResNet(block=BottleneckBlock, blocks=[3, 8, 36, 3], filters=[64, 128, 256, 512], num_classes=1000)
     if pretrained: raise NotImplementedError
