@@ -56,7 +56,7 @@ few convolutional layers, which means more parameters than its plain counterpart
 * Finally, the neural network ends with a global average pooling and a fully connected linear layer with 10 units
 that stands for the 10 classes of the CIFAR10 dataset.
 
-## :mechanical_arm: Training
+### :mechanical_arm: Training
 
 ```bash
 python resnet-pytorch/train.py
@@ -76,7 +76,7 @@ bla bla bla
 
 bla bla bla
 
-## :mechanical_arm: Training
+### :mechanical_arm: Training
 
 ```bash
 python resnet-pytorch/train.py
