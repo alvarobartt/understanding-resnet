@@ -170,9 +170,14 @@ so that the original mapping can be recasted to `F(x) + x`; in the worst case wh
 0 (let's assume we are using ReLU as the activation function), we will still keep the residual mapping `x`; so 
 that the training accuracy will be at least as good in the deeper net as in its shallower counterpart.
 
-* __ResNet Block as a Bottleneck design__: bla
+* __ResNet Block as a Bottleneck design__: in order to reduce the computational complexity of the `BasicBlock` that uses
+stacks of 2 3x3 convolutions, the `BottleneckBlock` uses stacks of 3 1x1, 3x3, and 1x1 convolutions. So that the 1x1 
+convolutions are the ones in charge of reducing the dimension, and increasing it, respectively. The process of decreasing
+the input dimensions before the 3x3 convolution, and then increasing it, is called "restoration process". Using these
+blocks in the deeper architectures helps us reduce the computational complexity, we end up with more layers but less 
+parameters that if we were using `BasicBlock` instead.
 
-* __Kaiming He Weight Initialization__: bla -> More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
+* __Kaiming He Weight Initialization__: More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
 
 ---
 
@@ -212,6 +217,10 @@ so as to understand why ResNets work and how are ResNets used in practice:
 
 * [Howard, J., Gugger, S., &amp; Chintala, S. (2020). Chapter 14. ResNets. In Deep learning for coders with fastai and PyTorch: AI applications without a PhD (pp. 441–458). O'Reilly Media, Inc.](https://www.amazon.es/Deep-Learning-Coders-Fastai-Pytorch/dp/1492045527)
 
+* [Residual Network Explained - Papers With Code: The latest in Machine Learning](https://paperswithcode.com/method/resnet)
+
 ### :computer: From code
 
 * [Official PyTorch implementation of ResNet](https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py)
+
+* [Unofficial PyTorch implementation of ResNet - Ross Wightman](https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/resnet.py)
