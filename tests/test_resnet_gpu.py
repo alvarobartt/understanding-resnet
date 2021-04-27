@@ -9,15 +9,18 @@ from resnet import resnet20
 from utils import select_device
 
 
-def test_device_is_cpu():
+def check_cuda_availability():
     global device
     device = select_device()
     assert 'cuda' == device
 
 
 def test_resnet20():
+    check_cuda_availability()
+    
     model = resnet20()
     model = model.to(device)
+    assert 20 == count_layers(model)
     assert True == next(model.parameters()).is_cuda
 
     inputs = torch.randn((1, 3, 32, 32))

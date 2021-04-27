@@ -1,15 +1,16 @@
 # :alembic: Implementation
 
-bla bla bla
+In order to understand how does the ResNet architecture works, we will be implementing it 
+in PyTorch according to the original paper. So on, here you'll find the implementation of
+both ResNets for CIFAR10 and for ImageNet.
+
+Before going through the implementation, reading both the [original paper](https://arxiv.org/abs/1512.03385) 
+and the notes in [README.md](https://github.com/alvarobartt/understanding-resnet/blob/master/README.md) is 
+recommended, so as to have a better understanding on how does this architecture work.
 
 ---
 
 ## :test_tube: ResNets for CIFAR10
-
-In order to understand how does the ResNet architecture works, we will be implementing the simplest version of it, which
-is the ResNet20 for CIFAR10. This exercise will be useful to understand the main differences between a plain convolutional
-neural network and deep residual network, and the functionality of the 
-"_shortcut connections_" in the residual building blocks.
 
 ### :open_file_folder: Dataset
 
@@ -65,8 +66,6 @@ python resnet-pytorch/train.py
 ---
 
 ## :test_tube: ResNets for ImageNet
-
-bla bla bla
 
 ### :open_file_folder: Dataset
 
