@@ -177,7 +177,18 @@ the input dimensions before the 3x3 convolution, and then increasing it, is call
 blocks in the deeper architectures helps us reduce the computational complexity, we end up with more layers but less 
 parameters that if we were using `BasicBlock` instead.
 
-* __Kaiming He Weight Initialization__: More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
+* __Kaiming He Weight Initialization__: initializing the weights before training deep networks lets us somehow handle
+the vanishing/exploding gradient problem as we are setting some initial weights, which are not randomly generated with a
+mean of zero and a standard deviation of one. Even though the ResNet architecture is prepared for a bad weight initialization
+thanks to the BatchNormalization layers, we will still define the weight initialization function so as to make the net more 
+resistent to vanishing/exploding gradients. So in Xavier Glorot initialization we calculate the variance of the weights so that
+for the activation function (sigmoid or tanh) those are still centered around zero, but with a smaller variance than 1, in this
+case 1/n where n is the number of weights connected to a node from the previous layer. So that after generating the random weights
+we multiply each of them by the square root of 1/n. If we are using a ReLU as the activation function instead (which is the most
+common scenario), the value for the variance of the weights is 2/n instead of 1/n, so that the randomly initialized weights
+are multiplied by the square root of 2/n. Also note that n is what in practice we call `fan_in`, but sometimes we may either use
+`fan_out` (the number of weights going out of the node) or both as the square root of 2/fan_in+fan_out. And, the biases are initialized
+at zero. More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
 
 ---
 
