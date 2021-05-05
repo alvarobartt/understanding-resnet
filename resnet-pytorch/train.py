@@ -86,8 +86,8 @@ def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> N
     ]
 
     # Define the loss function, the optimizer, and the learning rate scheduler
-    criterion = nn.CrossEntropyLoss()
-    criterion = criterion.to(device)
+    # Loss functions usually don't need to be moved to CUDA: https://discuss.pytorch.org/t/move-the-loss-function-to-gpu/20060/3
+    criterion = nn.CrossEntropyLoss().cuda() if torch.cuda.is_available() else nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=1e-1, momentum=9e-1, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=LR_MILESTONES, gamma=1e-1)
 
