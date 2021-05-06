@@ -6,7 +6,7 @@ __TL;DR__ In Residual Learning the layers are reformulated as learning residual 
 reference to the layer inputs. These networks are easier to optimize, and can gain accuracy
 from considerably increased depth. Along this repository not just an explanation is provided
 but also the implementation of the original ResNet architecture written in PyTorch. 
-Additionally, here you will also find both the ResNet20 & ResNet32 trained with CIFAR10, as proposed by the
+Additionally, here you will also find some ResNets trained with CIFAR10, as proposed by the
 authors; which are some of the smallest ResNets described in the original paper. And, also some
 ported weights for the bigger ResNets trained with ImageNet.
 
@@ -14,32 +14,12 @@ ported weights for the bigger ResNets trained with ImageNet.
 
 ## :crystal_ball: Future Tasks
 
-* [X] PyTorch Training for CIFAR10 using ResNet20
-* [X] Upload weights to GitHub Releases
-* [X] Compare the inference time depending on the memory-storage option (contiguous, channels last)
-* [X] Use Weights and Biases `wandb` to track the experiments
-* [X] Include the Bottleneck block for ResNet
-* [X] Add the block class as a parameter (BasicBlock or BottleneckBlock)
-* [X] Re-train ResNet20 and train ResNet34 for the first time, then update .pth
-* [X] Check whether the expansion parameter is needed (probably just for Bottleneck)
-* [X] Once implemented and understood, include some explanation on the Bottleneck blocks
-* [X] Split data 45k/5k before training!
-* [X] Improve training in train.py
-* [X] Move all the utilities to utils.py
-* [X] Implement https://github.com/akamaster/pytorch_resnet_cifar10/blob/master/resnet.py to check performance with CIFAR10 as described in the original paper
-* [X] Define the tests in GitHub Actions (look for useful resources to do so in a nice way)
-* [ ] Split CPU/GPU tests in GitHub Actions not in pytest
-* [X] Use [kornia/tests](https://github.com/kornia/kornia/tree/master/test) as a testing guide
-* [ ] Create a self-hosted runner for GPU runs at https://github.com/alvarobartt/understanding-resnet/settings/actions
-* [ ] Limit runs on CPU/GPU just to master so as not to let any user use my own GPU for overload issues
-* [ ] Implement the downsample/subsample method for CIFAR10 as described in the original paper
+* [ ] Use [kornia/tests](https://github.com/kornia/kornia/tree/master/test) as a testing guide
 * [ ] Use [torchtyping](https://github.com/patrick-kidger/torchtyping) for more typing details
 * [ ] Use [hydra](https://github.com/facebookresearch/hydra) to setup the configuration
 * [ ] Use [click](https://github.com/pallets/click) as the CLI to train and evaluate (the pretrained) models
 * [ ] Include the explanation on the implementation, training and usage of resnet-pytorch
-* [ ] Consider preparing a PyTorch Lightning interface to train ResNet20
-* [ ] Implement ResNets using JAX
-* [ ] Implement ResNets using MXNet
+* [ ] Consider preparing a PyTorch Lightning interface to train ResNets
 * [ ] Explain if applicable some of the wrong labels in CIFAR10 as stated in https://twitter.com/MIT_CSAIL/status/1377683177624367108
 
 ---
