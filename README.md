@@ -20,6 +20,8 @@ ported weights for the bigger ResNets trained with ImageNet.
 * [ ] Use [click](https://github.com/pallets/click) as the CLI to train and evaluate (the pretrained) models
 * [ ] Include the explanation on the implementation, training and usage of resnet-pytorch
 * [ ] Consider preparing a PyTorch Lightning interface to train ResNets
+* [ ] Explain ImageNet implementation https://github.com/alvarobartt/understanding-resnet/tree/master/resnet-pytorch#test_tube-resnets-for-imagenet
+* [ ] Port all the missing weights from TIMM (@rwightman)
 * [ ] Explain if applicable some of the wrong labels in CIFAR10 as stated in https://twitter.com/MIT_CSAIL/status/1377683177624367108
 
 ---
