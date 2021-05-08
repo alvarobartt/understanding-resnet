@@ -22,6 +22,11 @@ recommended, so as to have a better understanding on how does this architecture 
 * The data will be augmented padding 4px on each side, followed by a random crop of a window of shape 32x32 
 either from the original image or from its horizontal flip; just for the training data.
 
+:pushpin: A team led by researchers at MIT's Computer Science and Artificial Intelligence Lab (CSAIL) looked at 10 major 
+datasets that have been cited over 100,000 times and that include CIFAR and ImageNet. They found a 3.4% average error 
+rate across all datasets, including 6% for ImageNet, which is arguably the most widely used dataset for popular image 
+recognition systems. Check the CIFAR10 label errors at [Label Errors: Explore CIFAR10](https://labelerrors.com/).
+
 ### :brain: Architecture
 
 * The architecture is summarized in the following table, where `n=3` (ResNet20), `n=5` (ResNet32), `n=7` (ResNet44), `n=9` (ResNet56), and `n=18` (ResNet110).
@@ -80,6 +85,11 @@ are normalized in the range [-1, 1] with the mean and std.
 
 * So that the input images end up being 224x224px (width x height) in RGB format (3 channels), which is a Tensor of shape 
 `torch.Tensor([3, 32, 32])` (assuming `channels_last=False`).
+
+:pushpin: A team led by researchers at MIT's Computer Science and Artificial Intelligence Lab (CSAIL) looked at 10 major 
+datasets that have been cited over 100,000 times and that include CIFAR and ImageNet. They found a 3.4% average error 
+rate across all datasets, including 6% for ImageNet, which is arguably the most widely used dataset for popular image 
+recognition systems. Check the ImageNet label errors at [Label Errors: Explore ImageNet](https://labelerrors.com/).
 
 ### :brain: Architecture
 
