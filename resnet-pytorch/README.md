@@ -14,12 +14,13 @@ recommended, so as to have a better understanding on how does this architecture 
 
 ### :open_file_folder: Dataset
 
-* Input images are 32x32px (width x height) in RGB format (3 channels), which is a Tensor of shape `torch.Tensor([3, 32, 32])`.
+* Input images are 32x32px (width x height) in RGB format (3 channels), which is a Tensor of shape 
+`torch.Tensor([3, 32, 32])` (assuming `channels_last=False`).
 
 * The dataset consists of 50k training images and 10k test images, classified in 10 classes.
 
-* The data will be augmented padding 4px on each side, followed by a random crop of a window of shape 32x32 either from the 
-original image or from its horizontal flip; just for the training data.
+* The data will be augmented padding 4px on each side, followed by a random crop of a window of shape 32x32 
+either from the original image or from its horizontal flip; just for the training data.
 
 ### :brain: Architecture
 
@@ -69,14 +70,33 @@ python resnet-pytorch/train.py
 
 ### :open_file_folder: Dataset
 
-bla bla bla
+* The dataset consists of 1.28 million training images, 50k validation images, and 100 test images, classified in 1000 different classes.
+
+* Both precision @ 1, and precision @ 5, are being calculated while testing the model.
+
+* All the images are resized to their shorter side randomly sampled for scale augmentation, then a random crop of size 224x224px 
+is sampled from either the original image or from its horizontal flip (just for the training images); and, finally, all the images 
+are normalized in the range [-1, 1] with the mean and std.
+
+* So that the input images end up being 224x224px (width x height) in RGB format (3 channels), which is a Tensor of shape 
+`torch.Tensor([3, 32, 32])` (assuming `channels_last=False`).
 
 ### :brain: Architecture
 
-bla bla bla
+* The architecture is summarized in the following table:
 
-### :mechanical_arm: Training
+<img width="913" alt="imagen" src="https://user-images.githubusercontent.com/36760800/117533350-9c0a5e80-afec-11eb-8992-6154fe4cead8.png">
+  
+* The neural network starts off with a convolutional layer which applies a 7x7 convolution with a stride of 2 so as to
+reduce the dimension of the input image, resulting in 64 out channels.
 
-```bash
-python resnet-pytorch/train.py
-```
+* Also before applying the stack of residual blocks, it performs a 3x3 max pooling also with a stride of 2, to further reduce
+the dimensions of the image.
+
+* Both ResNet-18, and ResNet-34 consist on a stack of `BasicBlocks` to perform the identity shortcuts, while
+ResNet-56, ResNet-101, and ResNet-152 consist on a stack of `BottleneckBlocks`, since those are more optimal
+and less computatinoally expensive as they are using 1x1 convolutions to perform the upsample/downsample before
+and after the 3x3 convolution, respectively.
+
+* Finally, the neural network ends with a global average pooling and a fully connected linear layer with 1000 units
+that stands for the 1000 classes of the ImageNet-2012 dataset.
