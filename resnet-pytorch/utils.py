@@ -76,7 +76,7 @@ def port_resnet_weights(variant: str) -> ResNet:
 
     custom_state_dict = OrderedDict([])
 
-    # The known replacements between Ross Wightman's implementation and mine are defined
+    # The known replacements between Ross Wightman's/PyTorch implementation and mine are defined
     for k, v in original_state_dict.items():
         if k.startswith("layer"): k = k.replace("layer", "rl")
         if k.__contains__("downsample"): k = k.replace("downsample", "subsample")

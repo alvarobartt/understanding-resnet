@@ -104,7 +104,7 @@ reduce the dimension of the input image, resulting in 64 out channels.
 the dimensions of the image.
 
 * Both ResNet-18, and ResNet-34 consist on a stack of `BasicBlocks` to perform the identity shortcuts, while
-ResNet-56, ResNet-101, and ResNet-152 consist on a stack of `BottleneckBlocks`, since those are more optimal
+ResNet-50, ResNet-101, and ResNet-152 consist on a stack of `BottleneckBlocks`, since those are more optimal
 and less computatinoally expensive as they are using 1x1 convolutions to perform the upsample/downsample before
 and after the 3x3 convolution, respectively.
 
