@@ -139,3 +139,6 @@ wandb/
 
 # PyTorch State Dict
 *.pth
+
+# DS_Store
+.DS_Store
