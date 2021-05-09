@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, 'resnet-pytorch')
 
 from resnet import resnet20
-from utils import select_device
+from utils import select_device, count_layers
 
 
 def check_cuda_availability():

@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, 'resnet-pytorch')
 
 from resnet import resnet20
-from utils import select_device, count_layers
+from utils import count_layers
 
 
 def test_resnet20():
