@@ -61,7 +61,6 @@ MODELS = {
 @click.option('-z', '--zero-padding', is_flag=True, default=False)
 def train_cifar10(arch: str, zero_padding: bool) -> None:
     """Trains any ResNet with CIFAR10."""
-
     # Initializes the selected model
     model = MODELS[arch]['a' if zero_padding else 'b']
 

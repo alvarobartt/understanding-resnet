@@ -172,6 +172,54 @@ so as to understand why ResNets work and how are ResNets used in practice:
 
 ---
 
+## :computer: Usage
+
+### CIFAR10
+
+First import the model, and load the pre-trained set of weights:
+
+```python
+import sys
+sys.path.insert(0, 'resnet-pytorch')
+
+from resnet import resnet20
+
+model = resnet20(zero_padding=False, pretrained=True)
+```
+
+Then you can test the inference of the pre-trained model as it follows:
+
+```python
+import torch
+
+x = torch.randn((1, 3, 32, 32)) # batch_size, channels, height, width
+y = model(x)
+```
+
+### ImageNet
+
+First import the model, and load the pre-trained set of weights:
+
+```python
+import sys
+sys.path.insert(0, 'resnet-pytorch')
+
+from resnet import resnet18
+
+model = resnet18(zero_padding=False, pretrained=True)
+```
+
+Then you can test the inference of the pre-trained model as it follows:
+
+```python
+import torch
+
+x = torch.randn((1, 3, 224, 224)) # batch_size, channels, height, width
+y = model(x)
+```
+
+---
+
 ## :memo: Cite the authors
 
 ```bibtex
