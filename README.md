@@ -12,16 +12,6 @@ ported weights for the bigger ResNets trained with ImageNet.
 
 ---
 
-## :crystal_ball: Future Tasks
-
-* [ ] Use [kornia/tests](https://github.com/kornia/kornia/tree/master/test) as a testing guide
-* [ ] Use [torchtyping](https://github.com/patrick-kidger/torchtyping) for more typing details
-* [ ] Use [hydra](https://github.com/facebookresearch/hydra) to setup the configuration
-* [ ] Use [click](https://github.com/pallets/click) as the CLI to train and evaluate (the pretrained) models
-* [ ] Consider preparing a PyTorch Lightning interface to train ResNets
-
----
-
 ## :notebook: Explanation
 
 Answering to the question "_Is learning better networks as easy as stacking more layers?_", so it's 

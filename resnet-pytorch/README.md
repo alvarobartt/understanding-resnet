@@ -66,7 +66,22 @@ that stands for the 10 classes of the CIFAR10 dataset.
 ### :mechanical_arm: Training
 
 ```bash
-python resnet-pytorch/train.py
+>>> python resnet-pytorch/train.py --help
+Usage: train.py [OPTIONS]
+
+  Trains any ResNet with CIFAR10.
+
+Options:
+  -a, --arch [resnet20|resnet32|resnet44|resnet56|resnet101]
+                                  [required]
+  -z, --zero-padding
+  --help                          Show this message and exit.
+```
+
+e.g. to train ResNet20 with zero_padding, no extra parameter (option A):
+
+```bash
+>>> python resnet-pytorch/train.py --arch resnet20 --zero-padding
 ```
 
 ---

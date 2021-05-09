@@ -1,4 +1,4 @@
-"""ResNet20 Traning with CIFAR10 (Modified, not original version)
+"""ResNet Traning with CIFAR10
 
 He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
@@ -7,6 +7,8 @@ https://arxiv.org/pdf/1512.03385.pdf
 from __future__ import absolute_import
 
 import os
+
+import click
 
 import json
 
@@ -27,12 +29,42 @@ from torchvision.datasets import CIFAR10
 
 from timm.utils.metrics import AverageMeter, accuracy
 
-from resnet import ResNet
+from resnet import resnet20, resnet32, resnet44, resnet56, resnet110
 from utils import select_device, count_trainable_parameters, count_layers
 from utils import MEAN_NORMALIZATION, STD_NORMALIZATION
 
+MODELS = {
+    'resnet20': {
+        'a': resnet20(zero_padding=False, pretrained=False),
+        'b': resnet20(zero_padding=True, pretrained=False)
+    },
+    'resnet32': {
+        'a': resnet32(zero_padding=False, pretrained=False),
+        'b': resnet32(zero_padding=True, pretrained=False)
+    },
+    'resnet44': {
+        'a': resnet44(zero_padding=False, pretrained=False),
+        'b': resnet44(zero_padding=True, pretrained=False)
+    },
+    'resnet56': {
+        'a': resnet56(zero_padding=False, pretrained=False),
+        'b': resnet56(zero_padding=True, pretrained=False)
+    },
+    'resnet101': {
+        'a': resnet110(zero_padding=False, pretrained=False),
+        'b': resnet110(zero_padding=True, pretrained=False)
+    }
+}
 
-def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> None:
+@click.command()
+@click.option('-a', '--arch', required=True, type=click.Choice(list(MODELS.keys()), case_sensitive=False))
+@click.option('-z', '--zero-padding', is_flag=True, default=False)
+def train_cifar10(arch: str, zero_padding: bool) -> None:
+    """Trains any ResNet with CIFAR10."""
+
+    # Initializes the selected model
+    model = MODELS[arch]['a' if zero_padding else 'b']
+
     # Check whether GPU support is available or not
     device = torch.device(select_device())
 
@@ -102,10 +134,10 @@ def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> N
     config.batch_size = BATCH_SIZE
     config.batches_train = len(train_dataloader)
     config.batches_test = len(test_dataloader)
-    config.architecture = model_name
+    config.architecture = arch
     config.layers = total_layers
     config.parameters = trainable_parameters
-    config.option = model_option
+    config.option = 'a' if zero_padding else 'b'
     config.dataset = 'cifar10'
     config.dataset_train_size = len(train_dataset)
     config.dataset_test_size = len(test_dataset)
@@ -198,3 +230,7 @@ def train_resnet_cifar10(model: ResNet, model_name: str, model_option: str) -> N
     # Finish logging this wandb run
     # https://docs.wandb.ai/library/init#how-do-i-launch-multiple-runs-from-one-script
     run.finish()
+
+
+if __name__ == '__main__':
+    train_cifar10()
