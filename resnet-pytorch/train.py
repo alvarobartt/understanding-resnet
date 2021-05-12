@@ -62,7 +62,8 @@ MODELS = {
 def train_cifar10(arch: str, zero_padding: bool) -> None:
     """Trains any ResNet with CIFAR10."""
     # Initializes the selected model
-    model = MODELS[arch]['a' if zero_padding else 'b']
+    option = 'a' if zero_padding else 'b'
+    model = MODELS[arch][option]
 
     # Check whether GPU support is available or not
     device = torch.device(select_device())
@@ -136,7 +137,7 @@ def train_cifar10(arch: str, zero_padding: bool) -> None:
     config.architecture = arch
     config.layers = total_layers
     config.parameters = trainable_parameters
-    config.option = 'a' if zero_padding else 'b'
+    config.option = option
     config.dataset = 'cifar10'
     config.dataset_train_size = len(train_dataset)
     config.dataset_test_size = len(test_dataset)
@@ -221,8 +222,8 @@ def train_cifar10(arch: str, zero_padding: bool) -> None:
 
         if best_prec1 is None: best_prec1 = test_acc
         if best_prec1 <= test_acc:
-            torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{model_name}{model_option}-cifar10.pth"))
-            with open(os.path.join(wandb.run.dir, f"{model_name}{model_option}-cifar10.json"), "w") as f:
+            torch.save(model.state_dict(), os.path.join(wandb.run.dir, f"{arch}{option}-cifar10.pth"))
+            with open(os.path.join(wandb.run.dir, f"{arch}{option}-cifar10.json"), "w") as f:
                 json.dump({"epoch": epoch, "train_prec1": train_acc, "test_prec1": test_acc}, f)
             best_prec1 = test_acc
 

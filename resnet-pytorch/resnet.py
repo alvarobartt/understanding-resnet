@@ -4,7 +4,7 @@ He, Kaiming, et al. 'Deep Residual Learning for Image Recognition'
 https://arxiv.org/pdf/1512.03385.pdf
 """
 
-from typing import List, Tuple, Type, Union, Optional
+from typing import List, Type, Union, Optional
 
 import torch
 import torch.nn as nn
