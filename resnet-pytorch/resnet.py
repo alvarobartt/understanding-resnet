@@ -220,23 +220,32 @@ def resnet18(zero_padding: bool = False, pretrained: bool = False) -> ResNet:
 def resnet34(zero_padding: bool = False, pretrained: bool = False) -> ResNet:
     """ResNet-34 model for ImageNet."""
     model = ResNet(block=BasicBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000, zero_padding=zero_padding)
-    if pretrained: raise NotImplementedError
+    if pretrained:
+        if zero_padding: raise NotImplementedError
+        url = "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-imagenet/resnet34-imagenet-ported.pth"
+        model.load_state_dict(load_state_dict_from_url(url))
     return model
 
 def resnet50(pretrained: bool = False) -> ResNet:
     """ResNet-50 model for ImageNet."""
     model = ResNet(block=BottleneckBlock, blocks=[3, 4, 6, 3], filters=[64, 128, 256, 512], num_classes=1000)
-    if pretrained: raise NotImplementedError
+    if pretrained:
+        url = "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-imagenet/resnet50-imagenet-ported.pth"
+        model.load_state_dict(load_state_dict_from_url(url))
     return model
 
 def resnet101(pretrained: bool = False) -> ResNet:
     """ResNet-101 model for ImageNet."""
     model = ResNet(block=BottleneckBlock, blocks=[3, 4, 23, 3], filters=[64, 128, 256, 512], num_classes=1000)
-    if pretrained: raise NotImplementedError
+    if pretrained:
+        url = "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-imagenet/resnet101-imagenet-ported.pth"
+        model.load_state_dict(load_state_dict_from_url(url))
     return model
 
 def resnet152(pretrained: bool = False) -> ResNet:
     """ResNet-152 model for ImageNet."""
     model = ResNet(block=BottleneckBlock, blocks=[3, 8, 36, 3], filters=[64, 128, 256, 512], num_classes=1000)
-    if pretrained: raise NotImplementedError
+    if pretrained:
+        url = "https://github.com/alvarobartt/understanding-resnet/releases/download/v0.1-imagenet/resnet152-imagenet-ported.pth"
+        model.load_state_dict(load_state_dict_from_url(url))
     return model
