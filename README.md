@@ -88,75 +88,103 @@ problem.
 
 ## :pushpin: Useful concepts
 
-* __Vanishing/Exploding Gradients:__ this is a common error that usually happens in deep nets, when
-the gradient of the early layers get vanishingly small, as consequence of the product of gradients between 
-0 and 1 in the deeper layers, which results in a smaller gradient. This means that the small gradient is 
-backwards propagated so that when it gets to the early layers, the update of the weights is small as the
-gradient is really small. Then this makes the net harder to train as the weights in the early layers suffer
-small changes, which means that the global or local minimum of the loss function won't be reached. Exploding
-gradients is the opposite, which means that the gradients that get propagated backwards are huge, so that the 
-weight updates are not able to find the best weights, and so on, not to able to find the global or local minimum
-of the loss function.
+<details>
+  <summary><b>Vanishing/Exploding Gradients</b></summary>
+  
+  This is a common error that usually happens in deep nets, when
+  the gradient of the early layers get vanishingly small, as consequence of the product of gradients between 
+  0 and 1 in the deeper layers, which results in a smaller gradient. This means that the small gradient is 
+  backwards propagated so that when it gets to the early layers, the update of the weights is small as the
+  gradient is really small. Then this makes the net harder to train as the weights in the early layers suffer
+  small changes, which means that the global or local minimum of the loss function won't be reached. Exploding
+  gradients is the opposite, which means that the gradients that get propagated backwards are huge, so that the 
+  weight updates are not able to find the best weights, and so on, not to able to find the global or local minimum
+  of the loss function.
+</details>
 
-* __Degradation Problem__: deep nets tend to suffer from the degradation problem when including more layers 
-(increasing the depth of the net), so that the accuracy decreases, but this is not due to overfitting. We should
-expect that if a shallower net gets a certain accuracy, a deeper one should do at least as well as the shallower
-counterpart. Anyway, if those extra layers we include in the shallower net to make it deeper are just identity 
-mappings the accuracy should be the same as one achieved with the shallower net. But this doesn't happen, as the
-degradation problem appears as multiple non-linear layers can't learn the identity mappings, so that the accuracy
-gets degradated.
+<details>
+  <summary><b>Degradation Problem</b></summary>
+  
+  Deep nets tend to suffer from the degradation problem when including more layers 
+  (increasing the depth of the net), so that the accuracy decreases, but this is not due to overfitting. We should
+  expect that if a shallower net gets a certain accuracy, a deeper one should do at least as well as the shallower
+  counterpart. Anyway, if those extra layers we include in the shallower net to make it deeper are just identity 
+  mappings the accuracy should be the same as one achieved with the shallower net. But this doesn't happen, as the
+  degradation problem appears as multiple non-linear layers can't learn the identity mappings, so that the accuracy
+  gets degradated.
+</details>
 
-* __Batch Normalization (BN)__: it's a technique for improving the performance and stability of neural nets. BN 
-keeps the back propagated gradients from getting too big or too small by rescaling and recentering the value of 
-all the hidden units in a mini-batch. BN mainly affects the intermediate layers, not the early ones, making all 
-the hidden units on each layer to have the same mean and variance, reducing the effect of the covariant shift. 
-BN reduces the problem of the input values changing when updating the learnable parameters, so that those values 
-are more stable. We should expect the normalized hidden units have a mean of zero and variance of one, just like 
-the normalization performed to the input values, but what we just want is to have them in a standard scale, to 
-avoid sparsity, which results on the net training slower and having inbalanced gradients, causing instability. So 
-on, BN speeds up the training as it makes the optimization landscape significantly smoother, which results in a 
-stabilization of the gradients accross all the neurons, allowing faster training ([1805.11604](https://arxiv.org/pdf/1805.11604.pdf)); 
-due to this, BN also allows sub-optimal weight initialization, so that that it is less important, as we will get 
-the local minimum in a similar number of iterations. As previously mentioned, BN also acts as a regularizer, since 
-it computes the mean and variance per every neuron activation on each mini-batch so that it's including a random 
-noise to both the mean and the standard deviation, forcing the downstream hidden units not to rely that much on a 
-hidden unit. Note that increasing the mini-batch size results on a poor regularization effect. Even though BN acts 
-as a normalizer with some sort of randomness, usually the deep nets keep BN together with Dropout, as both 
-regularizers combined tend to provide better results ([1905.05928](https://arxiv.org/pdf/1905.05928.pdf)). More 
-information about BN available in [1502.03167](https://arxiv.org/pdf/1502.03167.pdf).
+<details>
+  <summary><b>Batch Normalization (BN)</b></summary>
+  
+  It's a technique for improving the performance and stability of neural nets. BN 
+  keeps the back propagated gradients from getting too big or too small by rescaling and recentering the value of 
+  all the hidden units in a mini-batch. BN mainly affects the intermediate layers, not the early ones, making all 
+  the hidden units on each layer to have the same mean and variance, reducing the effect of the covariant shift. 
+  BN reduces the problem of the input values changing when updating the learnable parameters, so that those values 
+  are more stable. We should expect the normalized hidden units have a mean of zero and variance of one, just like 
+  the normalization performed to the input values, but what we just want is to have them in a standard scale, to 
+  avoid sparsity, which results on the net training slower and having inbalanced gradients, causing instability. So 
+  on, BN speeds up the training as it makes the optimization landscape significantly smoother, which results in a 
+  stabilization of the gradients accross all the neurons, allowing faster training ([1805.11604](https://arxiv.org/pdf/1805.11604.pdf)); 
+  due to this, BN also allows sub-optimal weight initialization, so that that it is less important, as we will get 
+  the local minimum in a similar number of iterations. As previously mentioned, BN also acts as a regularizer, since 
+  it computes the mean and variance per every neuron activation on each mini-batch so that it's including a random 
+  noise to both the mean and the standard deviation, forcing the downstream hidden units not to rely that much on a 
+  hidden unit. Note that increasing the mini-batch size results on a poor regularization effect. Even though BN acts 
+  as a normalizer with some sort of randomness, usually the deep nets keep BN together with Dropout, as both 
+  regularizers combined tend to provide better results ([1905.05928](https://arxiv.org/pdf/1905.05928.pdf)). More 
+  information about BN available in [1502.03167](https://arxiv.org/pdf/1502.03167.pdf).
+</details>
 
-* __Shortcut/Skip Connections__: these connections are formulated so as to solve the degradation problem so that we
-can create a deeper net from the shallower version of it, without degradating the training accuracy. These 
-connections skip one or more layers.
+<details>
+  <summary><b>Shortcut/Skip Connections</b></summary>
+  
+  These connections are formulated so as to solve the degradation problem so that we
+  can create a deeper net from the shallower version of it, without degradating the training accuracy. These 
+  connections skip one or more layers.
+</details>
 
-* __Residual Learning__: instead of expecting a stack of layers to directly fit a desired underlying mapping, 
-those layers fit the residual mapping. So that instead of using a stack of non-linear layers to learn the identity 
-mappings we include the shortcut/skip,connection that connects the input of that stack of layers to the output of 
-the last layer in the stack, so that we ensure that the deeper counterpart achieves at least the same accuracy as
-the shallower counterpart. Instead of fitting the desired mapping `H(x)`, we fit another mapping `F(x) := H(x) - x`,
-so that the original mapping can be recasted to `F(x) + x`; in the worst case where the desired mapping `F(x)` is 
-0 (let's assume we are using ReLU as the activation function), we will still keep the residual mapping `x`; so 
-that the training accuracy will be at least as good in the deeper net as in its shallower counterpart.
+<details>
+  <summary><b>Residual Learning</b></summary>
+  
+  Instead of expecting a stack of layers to directly fit a desired underlying mapping, 
+  those layers fit the residual mapping. So that instead of using a stack of non-linear layers to learn the identity 
+  mappings we include the shortcut/skip,connection that connects the input of that stack of layers to the output of 
+  the last layer in the stack, so that we ensure that the deeper counterpart achieves at least the same accuracy as
+  the shallower counterpart. Instead of fitting the desired mapping `H(x)`, we fit another mapping `F(x) := H(x) - x`,
+  so that the original mapping can be recasted to `F(x) + x`; in the worst case where the desired mapping `F(x)` is 
+  0 (let's assume we are using ReLU as the activation function), we will still keep the residual mapping `x`; so 
+  that the training accuracy will be at least as good in the deeper net as in its shallower counterpart.
+</details>
 
-* __ResNet Block as a Bottleneck design__: in order to reduce the computational complexity of the `BasicBlock` that uses
-stacks of 2 3x3 convolutions, the `BottleneckBlock` uses stacks of 3 1x1, 3x3, and 1x1 convolutions. So that the 1x1 
-convolutions are the ones in charge of reducing the dimension, and increasing it, respectively. The process of decreasing
-the input dimensions before the 3x3 convolution, and then increasing it, is called "restoration process". Using these
-blocks in the deeper architectures helps us reduce the computational complexity, we end up with more layers but less 
-parameters that if we were using `BasicBlock` instead.
+<details>
+  <summary><b>ResNet Block as a Bottleneck design</b></summary>
+  
+  In order to reduce the computational complexity of the `BasicBlock` that uses
+  stacks of 2 3x3 convolutions, the `BottleneckBlock` uses stacks of 3 1x1, 3x3, and 1x1 convolutions. So that the 1x1 
+  convolutions are the ones in charge of reducing the dimension, and increasing it, respectively. The process of decreasing
+  the input dimensions before the 3x3 convolution, and then increasing it, is called "restoration process". Using these
+  blocks in the deeper architectures helps us reduce the computational complexity, we end up with more layers but less 
+  parameters that if we were using `BasicBlock` instead.
+</details>
 
-* __Kaiming He Weight Initialization__: initializing the weights before training deep networks lets us somehow handle
-the vanishing/exploding gradient problem as we are setting some initial weights, which are not randomly generated with a
-mean of zero and a standard deviation of one. Even though the ResNet architecture is prepared for a bad weight initialization
-thanks to the BatchNormalization layers, we will still define the weight initialization function so as to make the net more 
-resistent to vanishing/exploding gradients. So in Xavier Glorot initialization we calculate the variance of the weights so that
-for the activation function (sigmoid or tanh) those are still centered around zero, but with a smaller variance than 1, in this
-case 1/n where n is the number of weights connected to a node from the previous layer. So that after generating the random weights
-we multiply each of them by the square root of 1/n. If we are using a ReLU as the activation function instead (which is the most
-common scenario), the value for the variance of the weights is 2/n instead of 1/n, so that the randomly initialized weights
-are multiplied by the square root of 2/n. Also note that n is what in practice we call `fan_in`, but sometimes we may either use
-`fan_out` (the number of weights going out of the node) or both as the square root of 2/fan_in+fan_out. And, the biases are initialized
-at zero. More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
+<details>
+  <summary><b>Kaiming He Weight Initialization</b></summary>
+  
+  Initializing the weights before training deep networks lets us somehow handle
+  the vanishing/exploding gradient problem as we are setting some initial weights, which are not randomly generated with a
+  mean of zero and a standard deviation of one. Even though the ResNet architecture is prepared for a bad weight initialization
+  thanks to the BatchNormalization layers, we will still define the weight initialization function so as to make the net more 
+  resistent to vanishing/exploding gradients. So in Xavier Glorot initialization we calculate the variance of the weights so that
+  for the activation function (sigmoid or tanh) those are still centered around zero, but with a smaller variance than 1, in this
+  case 1/n where n is the number of weights connected to a node from the previous layer. So that after generating the random weights
+  we multiply each of them by the square root of 1/n. If we are using a ReLU as the activation function instead (which is the most
+  common scenario), the value for the variance of the weights is 2/n instead of 1/n, so that the randomly initialized weights
+  are multiplied by the square root of 2/n. Also note that n is what in practice we call `fan_in`, but sometimes we may either use
+  `fan_out` (the number of weights going out of the node) or both as the square root of 2/fan_in+fan_out. And, the biases are initialized
+  at zero. More information about Kaiming He Weight Initialization available in [1502.01852](https://arxiv.org/pdf/1502.01852.pdf).
+</details>
 
 ---
 
