@@ -69,7 +69,7 @@ def train_cifar10(arch: str, zero_padding: bool) -> None:
     device = torch.device(select_device())
 
     # Initiliaze ResNet for CIFAR10 and move it to the GPU (CPU if not available)
-    model = nn.DataParallel(model)
+    # model = nn.DataParallel(model) => https://discuss.pytorch.org/t/solved-keyerror-unexpected-key-module-encoder-embedding-weight-in-state-dict/1686
     model.to(device)
 
     # https://discuss.pytorch.org/t/what-does-torch-backends-cudnn-benchmark-do/5936
